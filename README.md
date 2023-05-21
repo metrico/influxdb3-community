@@ -17,7 +17,7 @@ docker pull ghcr.io/metrico/iox:latest
 ```
 git clone https://github.com/influxdata/influxdb_iox
 cd influxdb_iox
-DOCKER_BUILDKIT=1 docker build -t qxip/iox .
+DOCKER_BUILDKIT=1 docker build -t ghcr.io/metrico/iox:latest .
 ```
 
 ## Docker Compose
@@ -45,7 +45,7 @@ The expected response is `204`
 Let's launch the `sql` client using the `querier` gRPC API on port 8082
 
 ```
-docker run -ti --rm qxip/iox --host http://iox:8082 sql
+docker run -ti --rm ghcr.io/metrico/iox:latest --host http://iox:8082 sql
 ```
 
 #### IOX [SQL](https://github.com/influxdata/influxdb_iox/blob/main/docs/sql.md)
