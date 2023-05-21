@@ -1,0 +1,32 @@
+name: Build iox musl
+
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build_iox_linux:
+    name: ubuntu-20.04
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Check out iox
+        uses: actions/checkout@v3
+        with:
+          repository: influxdata/influxdb_iox
+           
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          target: x86_64-unknown-linux-musl
+
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target x86_64-unknown-linux-musl
