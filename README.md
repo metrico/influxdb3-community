@@ -53,15 +53,7 @@ This will start iox `router`, `querier`, `ingester` and `compactor` on the same 
 
 ## Testing
 
-It's time to test our fresh instance from top to bottom.
-
-Pull the latest static build to run the examples
-
-```
-curl -fsSL github.com/metrico/iox-builder/releases/download/main/influxdb_iox -O \
-&& chmod +x influxdb_iox
-```
-
+It's time to test our fresh instance with inserts and queries
 
 ### Health
 
@@ -82,9 +74,8 @@ The expected response is `204`
 ### Query
 Let's launch the `sql` client using the `querier` gRPC API on port 8082
 
-```
-docker run -ti --rm ghcr.io/metrico/iox:latest --host http://iox:8082 sql
-```
+* Using Binary `./influxdb_iox --host http://localhost:8082 sql`
+* Using Docker `docker run -ti --rm ghcr.io/metrico/iox:latest --host http://iox:8082 sql`
 
 #### IOX [SQL](https://github.com/influxdata/influxdb_iox/blob/main/docs/sql.md)
 
