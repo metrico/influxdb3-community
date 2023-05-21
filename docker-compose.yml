@@ -56,10 +56,10 @@ services:
     ports:
       - 8086:3000
     environment:
-      - INFLUX_HOST=iox
+      - INFLUX_HOST=iox:8082
       - INFLUX_TOKEN=${INFLUXDB_TOKEN}
-      - INFLUX_ORG=${INFLUXDB_ORG}
-      - INFLUX_BUCKET=${INFLUXDB_BUCKET}
+      - INFLUX_ORG=company
+      - INFLUX_BUCKET=sensors
       - GF_INSTALL_PLUGINS=influxdata-flightsql-datasource
     volumes: 
       - ./demo/grafana/datasources:/etc/grafana/provisioning/datasources
