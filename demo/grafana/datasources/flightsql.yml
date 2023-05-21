@@ -1,0 +1,22 @@
+apiVersion: 1
+
+datasources:
+  - name: FlightSQL
+    type: influxdata-flightsql-datasource
+    typeName: FlightSQL
+    access: proxy
+    url: ''
+    user: ''
+    database: ''
+    basicAuth: false
+    isDefault: true
+    jsonData:
+      host: iox:8082
+      metadata:
+      - bucket-name: company_sensors
+      - database: company_sensors
+      secure: false
+      token: ${INFLUX_TOKEN}
+    readOnly: false
+    editable: true
+

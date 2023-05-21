@@ -3,10 +3,11 @@ version: '2.1'
 volumes:
   iox_data: {}
   postgres_data: {}
+  grafana_data: {}
 
 services:
   iox:
-    image: ghcr.io/metrico/iox:latest
+    image: ghcr.io/metrico/iox-musl:latest
     container_name: iox
     volumes:
       - ./data:/data
@@ -49,3 +50,21 @@ services:
 #      - POSTGRES_HOST_AUTH_METHOD=trust
 #      - POSTGRES_DB=iox
 #      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - 8086:3000
+    environment:
+      - INFLUX_HOST=iox
+      - INFLUX_TOKEN=${INFLUXDB_TOKEN}
+      - INFLUX_ORG=${INFLUXDB_ORG}
+      - INFLUX_BUCKET=${INFLUXDB_BUCKET}
+      - GF_INSTALL_PLUGINS=influxdata-flightsql-datasource
+    volumes: 
+      - ./demo/grafana/datasources:/etc/grafana/provisioning/datasources
+#      - ./demo/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - grafana_data:/var/lib/grafana/
+    restart: always
+    depends_on:
+      - iox
