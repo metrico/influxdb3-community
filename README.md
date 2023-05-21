@@ -9,7 +9,6 @@ Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in 
 😄 No problem! Meet the _unofficial_ InfluxDB 3.0 _"iox"_ musl + docker builder for early adopters
 
 ##### Docker
-  - [x] glibc/amd64 `docker pull ghcr.io/metrico/iox:latest`
   - [x] musl/amd64: `docker pull ghcr.io/metrico/iox-musl:latest`
 ##### Binaries
   - [x] musl/amd64: `github.com/metrico/iox-builder/releases/latest/download/influxdb_iox`
