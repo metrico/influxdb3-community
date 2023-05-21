@@ -10,10 +10,10 @@ Pronounced _(eye-ox)_, short for iron oxide. This is the new core of InfluxDB wr
 
 No problem! Meet the _unofficial_ InfluxDB 3.0 _"iox"_ musl + docker builder.
 
-### Docker
+##### Docker
   - [x] glibc/amd64 `docker pull ghcr.io/metrico/iox:latest`
   - [x] musl/amd64: `docker pull ghcr.io/metrico/iox-musl:latest`
-### Binaries
+##### Binaries
   - [x] musl/amd64: `github.com/metrico/iox-builder/releases/latest/download/influxdb_iox`
 
 <br>
@@ -74,10 +74,10 @@ The expected response is `204`
 ### Query
 Let's launch the `sql` client using the `querier` gRPC API on port 8082
 
-* Using Binary `./influxdb_iox --host http://localhost:8082 sql`
-* Using Docker `docker run -ti --rm ghcr.io/metrico/iox:latest --host http://iox:8082 sql`
+* Using Binary: `./influxdb_iox --host http://localhost:8082 sql`
+* Using Docker: `docker run -ti --rm ghcr.io/metrico/iox:latest --host http://iox:8082 sql`
 
-#### IOX [SQL](https://github.com/influxdata/influxdb_iox/blob/main/docs/sql.md)
+#### [Datafusion SQL](https://github.com/influxdata/influxdb_iox/blob/main/docs/sql.md)
 
 The first requirement is to choose a namespace _(or bucket)_ from the available ones:
 ```
