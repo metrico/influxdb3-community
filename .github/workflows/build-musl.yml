@@ -17,7 +17,7 @@ jobs:
         with:
           repository: influxdata/influxdb_iox
       - run: |
-          echo "VERSION=${{  github.ref_name || "0.0.0" }}" >> $GITHUB_ENV
+          echo "VERSION=${{  github.ref_name || '0.0.0' }}" >> $GITHUB_ENV
       - run: sudo apt update && sudo apt install -y musl-tools
       - name: Setup protoc
         uses: arduino/setup-protoc@v1.2.0
