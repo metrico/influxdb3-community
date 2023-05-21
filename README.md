@@ -34,6 +34,14 @@ This will start iox `router`, `querier`, `ingester` and `compactor` on the same 
 
 It's time to test our fresh instance from top to bottom.
 
+Pull the latest static build to run the examples
+
+```
+curl -fsSL github.com/metrico/iox-builder/releases/download/main/influxdb_iox -O \
+&& chmod +x influxdb_iox
+```
+
+
 ### Health
 
 Check the instance health: `curl http://127.0.0.1:8080/health`
