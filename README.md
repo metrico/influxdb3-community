@@ -1,12 +1,12 @@
 <img src="https://pbs.twimg.com/profile_banners/1967601206/1682514855/1500x500" width=800>
 
-# iox-docker
+# iox-builder
 
 Pronounced _(eye-ox)_, short for iron oxide. This is the new core of InfluxDB written in Rust on top of Apache Arrow.
 
 > InfluxDB: The iox project is in active development, which is why we're not producing builds yet.
 
-No problem! Meet the _unofficial_ InfluxDB 3.0 _"iox"_ docker builder.
+No problem! Meet the _unofficial_ InfluxDB 3.0 _"iox"_ musl + docker builder.
 
 <br>
 
