@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: influxdata/influxdb_iox
-           
+      - run: sudo apt update && sudo apt install -y musl-tools     
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
         with:
