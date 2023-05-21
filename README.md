@@ -34,12 +34,13 @@ This will start iox `router`, `querier`, `ingester` and `compactor` on the same 
 
 It's time to test our fresh instance from top to bottom.
 
-### Insert
+### Health
 
 Check the instance health: `curl http://127.0.0.1:8080/health`
 
 The expected response is `OK`
 
+### Insert
 
 Insert a sample dataset using the Influx V2 API and line protocol to test the `router` API on port 8080
 ```
