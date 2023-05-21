@@ -14,16 +14,13 @@ No problem! Meet the _unofficial_ InfluxDB 3.0 _"iox"_ musl + docker builder.
   - [x] glibc/amd64 `docker pull ghcr.io/metrico/iox:latest`
   - [x] musl/amd64: `docker pull ghcr.io/metrico/iox-musl:latest`
 ### Binaries
-  - [x] musl/amd64
-   ```
-   curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox -O \
-   && chmod +x influxdb_iox
-   ```
+  - [x] musl/amd64: `github.com/metrico/iox-builder/releases/latest/download/influxdb_iox`
+
 <br>
 
 ## Get iox
 
-Pull the latest iox static build or docker image:
+Pull the latest iox static build or docker image. This demo will use both.
 
 #### Static
 ```
@@ -40,7 +37,19 @@ Our compose will start an `all-in-one` iox instance using the provided [compose 
 docker-compose up -d
 ```
 
-This will start iox `router`, `querier`, `ingester` and `compactor` on the same host.
+This will start iox `router`, `querier`, `ingester` and `compactor` on the same host using the following settings:
+
+```
+      - INFLUXDB_IOX_OBJECT_STORE=file
+      - INFLUXDB_IOX_DB_DIR=/data
+      - INFLUXDB_IOX_BUCKET=iox
+      - INFLUXDB_IOX_CATALOG_DSN=sqlite:///data/catalog.sqlite
+      - INFLUXDB_IOX_ROUTER_HTTP_BIND_ADDR=iox:8080
+      - INFLUXDB_IOX_ROUTER_GRPC_BIND_ADDR=iox:8081
+      - INFLUXDB_IOX_QUERIER_GRPC_BIND_ADDR=iox:8082
+      - INFLUXDB_IOX_INGESTER_GRPC_BIND_ADDR=iox:8083
+      - INFLUXDB_IOX_COMPACTOR_GRPC_BIND_ADDR=iox:8084
+```
 
 ## Testing
 
