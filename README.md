@@ -12,14 +12,18 @@ No problem! Meet the _unofficial_ InfluxDB 3.0 _"iox"_ musl + docker builder.
   - [x] glibc/amd64 `docker pull ghcr.io/metrico/iox:latest`
   - [x] musl/amd64: `docker pull ghcr.io/metrico/iox-musl:latest`
 ### Binaries
-  - [x] musl/amd64: `curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox -O && chmod +x influxdb_iox`
+  - [x] musl/amd64
+   ```
+   curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox -O \
+   && chmod +x influxdb_iox
+   ```
 
 
 <br>
 
 ## Get iox
 
-Pull the latest static build, docker image, or build your own:
+Pull the latest iox static build or docker image:
 
 #### Static
 ```
@@ -27,12 +31,7 @@ curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox 
 ```
 #### Docker
 ```
-docker pull ghcr.io/metrico/iox:latest
-```
-```
-git clone https://github.com/influxdata/influxdb_iox
-cd influxdb_iox
-DOCKER_BUILDKIT=1 docker build -t ghcr.io/metrico/iox:latest .
+docker pull ghcr.io/metrico/iox-musl:latest
 ```
 
 ## Docker Compose
