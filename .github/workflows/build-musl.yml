@@ -17,7 +17,7 @@ jobs:
         with:
           repository: influxdata/influxdb_iox
       - run: |
-          echo "VERSION=${{  github.ref_name || '0.0.0' }}" >> $GITHUB_ENV
+          echo "VERSION=${{  github.ref_name }}" >> $GITHUB_ENV
       - run: sudo apt update && sudo apt install -y musl-tools
       - name: Setup protoc
         uses: arduino/setup-protoc@v1.2.0
@@ -44,10 +44,9 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --target x86_64-unknown-linux-musl      
+          args: --release --target x86_64-unknown-linux-musl --features aws,default  
       - name: Check Target
         run: |
-          find ./ -name influxdb_iox
           ls -alFh ./target/x86_64-unknown-linux-musl/release/influxdb_iox
           ldd ./target/x86_64-unknown-linux-musl/release/influxdb_iox        
       - name: Compress iox
