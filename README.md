@@ -2,17 +2,23 @@
 
 # iox-docker
 
-InfluxDB 3.0 _"iox"_ in a cloudless box
+> InfluxDB: The iox project is in active development, which is why we're not producing builds yet.
 
-## Build Container or Pull Latest
-Influxdata does not yet distribute builds, so we'll build our own image:
+No problem! Meet the _unofficial_ InfluxDB 3.0 _"iox"_ docker builder.
+
+<br>
+
+## Build or Pull Container
+Pull the latest public image, or build your own:
+
+```
+docker pull qxip/iox:latest
+```
 ```
 git clone https://github.com/influxdata/influxdb_iox
 cd influxdb_iox
 DOCKER_BUILDKIT=1 docker build -t qxip/iox .
 ```
-
-or pull the latest publix build `docker pull qxip/iox:latest`
 
 ## Docker Compose
 Our compose will start an `all-in-one` iox instance using the provided [compose file](https://gist.github.com/lmangani/c48cf7ef997ed5273ec05a15937c7ad5/raw/a87a13ecad33512ea902705f19ef5866f9a95245/docker-compose.yml)
