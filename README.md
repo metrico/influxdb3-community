@@ -12,7 +12,7 @@ No problem! Meet the _unofficial_ InfluxDB 3.0 _"iox"_ docker builder.
 Pull the latest public image, or build your own:
 
 ```
-docker pull qxip/iox:latest
+docker pull ghcr.io/metrico/iox:latest
 ```
 ```
 git clone https://github.com/influxdata/influxdb_iox
