@@ -30,3 +30,8 @@ jobs:
         with:
           command: build
           args: --release --target x86_64-unknown-linux-musl
+          
+      - name: Check
+        run: |
+          ls -alFh target
+          find ./ -name influxdb_iox
