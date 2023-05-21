@@ -1,7 +1,6 @@
 <img src="https://pbs.twimg.com/profile_banners/1967601206/1682514855/1500x500" width=800>
 
-# iox-builder
-
+# iox
 Pronounced _(eye-ox)_, short for iron oxide. This is the new core of InfluxDB written in Rust on top of Apache Arrow.
 
 <br>
@@ -18,7 +17,7 @@ Pronounced _(eye-ox)_, short for iron oxide. This is the new core of InfluxDB wr
 
 <br>
 
-## Get iox
+## Get Started
 
 Pull the latest iox static build or docker image. This demo will use both.
 
