@@ -36,7 +36,8 @@ It's time to test our fresh instance from top to bottom.
 
 Insert a sample dataset using the Influx V2 API and line protocol to test the `router` API on port 8080
 ```
-curl "https://github.com/influxdata/influxdb_iox/raw/main/test_fixtures/lineproto/metrics.lp" | curl -v "http://127.0.0.1:8080/api/v2/write?org=company&bucket=sensors" --data-binary @-
+curl "https://github.com/influxdata/influxdb_iox/raw/main/test_fixtures/lineproto/metrics.lp" | \
+curl -v "http://127.0.0.1:8080/api/v2/write?org=company&bucket=sensors" --data-binary @-
 ```
 
 The expected response is `204`
