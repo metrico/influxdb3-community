@@ -36,7 +36,10 @@ It's time to test our fresh instance from top to bottom.
 
 ### Insert
 
-Check if the instance is OK: `curl http://127.0.0.1:8080/health`
+Check the instance health: `curl http://127.0.0.1:8080/health`
+
+The expected response is `OK`
+
 
 Insert a sample dataset using the Influx V2 API and line protocol to test the `router` API on port 8080
 ```
