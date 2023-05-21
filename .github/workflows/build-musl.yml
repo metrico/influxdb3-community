@@ -21,14 +21,6 @@ jobs:
       - run: sudo apt update && sudo apt install -y musl-tools
       - name: Setup protoc
         uses: arduino/setup-protoc@v1.2.0
-      - name: Cache Rust compilation
-        uses: metalbear-co/sccache-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          # Optional, default is `sccache-`
-          cache-from: sccache-${{ runner.os }}-
-          # Optional, default is `sccache-latest`
-          cache-to: sccache-${{ runner.os }}-${{ github.sha }}
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -36,23 +28,36 @@ jobs:
           toolchain: stable
           override: true
           target: x86_64-unknown-linux-musl
-
+      - name: Set up cargo cache
+        uses: actions/cache@v3
+        continue-on-error: false
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/            
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
       - name: Build
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --target x86_64-unknown-linux-musl
-          
-      - name: Check
+          args: --release --target x86_64-unknown-linux-musl      
+      - name: Check Target
         run: |
           find ./ -name influxdb_iox
-          ldd ./target/x86_64-unknown-linux-musl/release/influxdb_iox
-          
-      - name: Compress Fluxpipe
+          ls -alFh ./target/x86_64-unknown-linux-musl/release/influxdb_iox
+          ldd ./target/x86_64-unknown-linux-musl/release/influxdb_iox        
+      - name: Compress iox
         run: |
           strip ./target/x86_64-unknown-linux-musl/release/influxdb_iox
           upx ./target/x86_64-unknown-linux-musl/release/influxdb_iox
-          
+      - uses: actions/upload-artifact@v3
+        with:
+          name: iox-musl
+          path: ./target/x86_64-unknown-linux-musl/release/influxdb_iox 
       - name: Upload release
         if: github.event_name != 'pull_request'
         uses: boxpositron/upload-multiple-releases@1.0.7
