@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   release:
     types: [created]
+  schedule:
+    # build nightly version 
+    - cron:  '30 5, * * *'
 
 jobs:
   build_iox_linux:
