@@ -3,8 +3,8 @@
 # iox
 Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in Rust on top of Apache Arrow.
 
-<br>
-
+### Motivation
+😄 You want to experience the low-cost storage, unlimited cardinality and flight sql!<br>
 😮‍ The iox project is in active development, which is why InfluxDB is not producing builds yet...<br>
 😄 No problem! Meet the _unofficial_ InfluxDB 3.0 _"iox"_ musl + docker builder for early adopters
 
