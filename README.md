@@ -48,6 +48,8 @@ This will start iox `router`, `querier`, `ingester` and `compactor` on the same 
       - INFLUXDB_IOX_COMPACTOR_GRPC_BIND_ADDR=iox:8084
 ```
 
+If you want to use S3/R2/Minio for storage refer to [this example](https://github.com/metrico/iox-builder/blob/main/env.example)
+
 ## Testing
 
 It's time to test our fresh instance with inserts and queries
