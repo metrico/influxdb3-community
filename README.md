@@ -134,9 +134,13 @@ company_sensors> select * from cpu WHERE usage_idle <= 96 limit 1;
 +------+---------------------------------+----------------------+-------------+------------------+-------------------+--------------+-----------+------------+---------------+-------------+-------------------+-------------------+
 ```
 
-### Grafana
+### Golang Client
 
-Our service can be used with the [FlightSQL datasource](https://github.com/influxdata/grafana-flightsql-datasource) in Grafana:
+Query iox from your code using the included [client examples](https://github.com/metrico/iox-builder/tree/main/client)
+
+### Grafana Client
+
+Your service can be used with the [FlightSQL datasource](https://github.com/influxdata/grafana-flightsql-datasource) in Grafana:
 
 ![image](https://user-images.githubusercontent.com/1423657/239708678-8e947ae0-6710-4ae4-85c1-903f4c06b085.png)
 
