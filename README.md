@@ -48,6 +48,13 @@ This will start IOx `router`, `querier`, `ingester` and `compactor` on the same 
       - INFLUXDB_IOX_COMPACTOR_GRPC_BIND_ADDR=iox:8084
 ```
 
+Each server needs an identifier for writing to object storage and as an identifier that is added to replicated writes, Write Buffer segments and Chunks. Must be unique in a group of connected or semi-connected IOx servers. Must be a number that can be represented by a 32-bit unsigned integer.
+
+```
+      - INFLUXDB_IOX_ID=1
+```
+
+
 To enable persisten catalog using postgres, use the following:
 
 ```
@@ -63,12 +70,6 @@ To enable S3/R2/Minio object storage use the following parameters:
       - AWS_DEFAULT_REGION=us-east-2
       - INFLUXDB_IOX_BUCKET=bucket-name
       - AWS_ENDPOINT = http://minio:9000
-```
-
-Each server needs an identifier for writing to object storage and as an identifier that is added to replicated writes, Write Buffer segments and Chunks. Must be unique in a group of connected or semi-connected IOx servers. Must be a number that can be represented by a 32-bit unsigned integer.
-
-```
-      - INFLUXDB_IOX_ID=1
 ```
 
 For other storage options refer to [env example](https://github.com/metrico/iox-builder/blob/main/env.example)
