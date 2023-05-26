@@ -1,12 +1,12 @@
 <img src="https://pbs.twimg.com/profile_banners/1967601206/1682514855/1500x500" width=800>
 
-# iox
+# IOx
 Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in Rust on top of Apache Arrow.
 
 ### Motivation
 😄 You want to try and experiment with iox low-cost storage, unlimited cardinality and flight sql<br>
-😮‍ The iox project is in active development, which is why InfluxDB is not producing builds yet...<br>
-😄 No problem! Meet the _unofficial_ InfluxDB 3.0 _"iox"_ musl + docker builder for early adopters
+😮‍ The IOx project is in active development, which is why InfluxDB is not producing builds yet...<br>
+😄 No problem! Meet the _unofficial_ InfluxDB 3.0 _"IOx"_ musl + docker builder for early adopters
 
 ##### Releases
 ###### amd64/musl
@@ -29,12 +29,12 @@ docker pull ghcr.io/metrico/iox-musl:latest
 ```
 
 ## Docker Compose
-Our compose will start an `all-in-one` iox instance using the provided [compose file](https://gist.github.com/lmangani/c48cf7ef997ed5273ec05a15937c7ad5/raw/a87a13ecad33512ea902705f19ef5866f9a95245/docker-compose.yml)
+Our compose will start an `all-in-one` IOx instance using the provided [compose file](https://gist.github.com/lmangani/c48cf7ef997ed5273ec05a15937c7ad5/raw/a87a13ecad33512ea902705f19ef5866f9a95245/docker-compose.yml)
 ```
 docker-compose up -d
 ```
 
-This will start iox `router`, `querier`, `ingester` and `compactor` on the same host using the following settings:
+This will start IOx `router`, `querier`, `ingester` and `compactor` on the same host using local storage:
 
 ```
       - INFLUXDB_IOX_OBJECT_STORE=file
@@ -48,7 +48,30 @@ This will start iox `router`, `querier`, `ingester` and `compactor` on the same 
       - INFLUXDB_IOX_COMPACTOR_GRPC_BIND_ADDR=iox:8084
 ```
 
-If you want to use S3/R2/Minio for storage refer to [this example](https://github.com/metrico/iox-builder/blob/main/env.example)
+To enable persisten catalog using postgres, use the following:
+
+```
+      - INFLUXDB_IOX_CATALOG_DSN=postgres://postgres@localhost:5432/postgres
+```
+
+To enable S3/R2/Minio object storage use the following parameters:
+
+```
+      - INFLUXDB_IOX_OBJECT_STORE=s3
+      - AWS_ACCESS_KEY_ID=access_key_value
+      - AWS_SECRET_ACCESS_KEY=secret_access_key_value
+      - AWS_DEFAULT_REGION=us-east-2
+      - INFLUXDB_IOX_BUCKET=bucket-name
+      - AWS_ENDPOINT = http://minio:9000
+```
+
+Each server needs an identifier for writing to object storage and as an identifier that is added to replicated writes, Write Buffer segments and Chunks. Must be unique in a group of connected or semi-connected IOx servers. Must be a number that can be represented by a 32-bit unsigned integer.
+
+```
+      - INFLUXDB_IOX_ID=1
+```
+
+For other storage options refer to [env example](https://github.com/metrico/iox-builder/blob/main/env.example)
 
 ## Testing
 
@@ -136,7 +159,7 @@ company_sensors> select * from cpu WHERE usage_idle <= 96 limit 1;
 
 ### Golang Client
 
-Query iox from your code using the included [client examples](https://github.com/metrico/iox-builder/tree/main/client)
+Query the IOx gRPC API from your code using the included [client examples](https://github.com/metrico/iox-builder/tree/main/client)
 
 ### Grafana Client
 
