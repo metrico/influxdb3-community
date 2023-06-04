@@ -192,13 +192,14 @@ Once ready, we can perform queries against our data using the FlightSQL query bu
 ![image](https://user-images.githubusercontent.com/1423657/239708634-30b48942-d630-4feb-887d-5b6dc37f54d3.png)
                                                         
 </details>
-  
 
 </details>
 
-<hr>
-    
-## Disclaimers
+<details>
+    <summary><h2>Legal Disclaimers</h2></summary>  
+  
 - All rights reserved by their respective owners. IOx and InfluxDB are a trademark of Influxdata.   
 - This project is not connected or endorsed by Influxdata or the IOx project. Hopefully one day!
 - Original, unstable, nightly. The IOx code is not modified in any way as part of the build process. 
+  
+</details>
