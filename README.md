@@ -17,7 +17,7 @@ Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in 
 
 ## Get Started
 
-Pull the latest iox static build or docker image. This demo will work with either.
+Pull the latest IOx static builds or use docker images. This demo will work with either.
 
 #### Static
 ```
@@ -26,17 +26,13 @@ curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox 
 
 #### Docker
 ```
-docker pull ghcr.io/metrico/iox-musl:latest
-```
-
-Launch an `all-in-one` IOx instance using the provided [compose file](https://gist.github.com/lmangani/c48cf7ef997ed5273ec05a15937c7ad5/raw/a87a13ecad33512ea902705f19ef5866f9a95245/docker-compose.yml)
-```
 docker-compose up -d
 ```
 
+<br>
   
 <details>
-    <summary><h2>Settings</h2> Deploy IOx using different settings</summary>  
+    <summary><h2>IOx Settings</h2> Deploy IOx using different settings</summary>  
   
 This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the same host using local storage:
 
