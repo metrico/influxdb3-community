@@ -17,24 +17,28 @@ Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in 
 
 ## Get Started
 
-Pull the latest iox static build or docker image. This demo will use both.
+Pull the latest iox static build or docker image. This demo will work with either.
 
 #### Static
 ```
 curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox -O && chmod +x influxdb_iox
 ```
+
 #### Docker
 ```
 docker pull ghcr.io/metrico/iox-musl:latest
 ```
 
-## Docker Compose
-Our compose will start an `all-in-one` IOx instance using the provided [compose file](https://gist.github.com/lmangani/c48cf7ef997ed5273ec05a15937c7ad5/raw/a87a13ecad33512ea902705f19ef5866f9a95245/docker-compose.yml)
+Launch an `all-in-one` IOx instance using the provided [compose file](https://gist.github.com/lmangani/c48cf7ef997ed5273ec05a15937c7ad5/raw/a87a13ecad33512ea902705f19ef5866f9a95245/docker-compose.yml)
 ```
 docker-compose up -d
 ```
 
-This will start IOx `router`, `querier`, `ingester` and `compactor` on the same host using local storage:
+  
+<details>
+    <summary><h2>Settings</h2> Deploy IOx using different settings</summary>  
+  
+This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the same host using local storage:
 
 ```
       - INFLUXDB_IOX_OBJECT_STORE=file
@@ -74,7 +78,11 @@ To enable S3/R2/Minio object storage use the following parameters:
 
 For other storage options refer to [env example](https://github.com/metrico/iox-builder/blob/main/env.example)
 
-## Testing
+</details>
+  
+
+<details>
+    <summary><h2>Insert & Query</h2> Validate your IOx Setup</summary>
 
 It's time to test our fresh instance with inserts and queries
 
@@ -158,11 +166,19 @@ company_sensors> select * from cpu WHERE usage_idle <= 96 limit 1;
 +------+---------------------------------+----------------------+-------------+------------------+-------------------+--------------+-----------+------------+---------------+-------------+-------------------+-------------------+
 ```
 
-### Golang Client
+</details>
+                                                        
+<details>
+    <summary><h2>Integrations</h2> Integrate your IOx Setup with Go, Rust, Python, etc</summary>  
+  
+## Integrations
 
-Query the IOx gRPC API from your code using the included [client examples](https://github.com/metrico/iox-builder/tree/main/client)
+Flight SQL [client examples](https://github.com/metrico/iox-static-distro/tree/main/examples) are available for Go, Rust, Python and other languages.
+  
+<details>
+    <summary><h4>Grafana</h4> Integrate your IOx Setup with Grafana</summary>  
 
-### Grafana Client
+  ### Grafana Client
 
 Your service can be used with the [FlightSQL datasource](https://github.com/influxdata/grafana-flightsql-datasource) in Grafana:
 
@@ -171,3 +187,8 @@ Your service can be used with the [FlightSQL datasource](https://github.com/infl
 Once ready, we can perform queries against our data using the FlightSQL query builder:
 
 ![image](https://user-images.githubusercontent.com/1423657/239708634-30b48942-d630-4feb-887d-5b6dc37f54d3.png)
+                                                        
+</details>
+  
+
+</details>
