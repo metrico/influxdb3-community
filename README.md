@@ -179,6 +179,12 @@ IOx Flight SQL [client examples](https://github.com/metrico/iox-static-distro/tr
   * [rust](https://github.com/metrico/iox-static-distro/tree/main/examples/rust)
   * [python](https://github.com/metrico/iox-static-distro/tree/main/examples/python)
   
+IOx Official clients:
+  
+  * [influxdb-iox-client-go](https://github.com/influxdata/influxdb-iox-client-go)
+  * [flightsql-dbapi-python](https://github.com/influxdata/flightsql-dbapi)
+  * [influxdb_iox_client-rust](https://crates.io/crates/influxdb_iox_client)
+  
 <details>
     <summary><h3>Grafana</h3> Integrate your IOx Setup with Grafana</summary>  
 
