@@ -1,7 +1,9 @@
 # IOx 
 ### FlightSQL Python
-Client example for IOx gRPC Flight SQL API
+Example gRPC Flight SQL API client
 
+#### Usage
 ```
 python3 client.py
 ```
+
