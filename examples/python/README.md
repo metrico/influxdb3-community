@@ -1,6 +1,6 @@
 # IOx 
 ### FlightSQL Python
-Example gRPC Flight SQL API client
+Example gRPC Flight SQL API client using Python3
 
 #### Usage
 ```
