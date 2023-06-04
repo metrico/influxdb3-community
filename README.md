@@ -20,8 +20,9 @@ Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in 
 Pull the latest IOx static builds or use docker images. This demo will work with either.
 
 #### Static
-```
-curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox -O && chmod +x influxdb_iox
+```bash
+curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox -O \
+&& chmod +x influxdb_iox
 ```
 
 #### Docker
