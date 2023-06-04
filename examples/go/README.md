@@ -7,3 +7,8 @@ Example gRPC Flight SQL API client using golang
 go mod tidy
 go run flightsql.go
 ```
+
+#### Static 
+```
+CGO_ENABLED=0 go build -ldflags="-extldflags=-static" -o flightsql flightsql.go 
+```
