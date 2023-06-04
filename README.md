@@ -173,13 +173,13 @@ company_sensors> select * from cpu WHERE usage_idle <= 96 limit 1;
 <details>
     <summary><h2>IOx Integrations</h2> Integrate your IOx Setup with Go, Rust, Python, etc</summary>  
   
-IOx Flight SQL [client examples](https://github.com/metrico/iox-static-distro/tree/main/examples)
+> IOx Flight SQL [generic client examples](https://github.com/metrico/iox-static-distro/tree/main/examples)
   
   * [golang](https://github.com/metrico/iox-static-distro/tree/main/examples/go)
   * [rust](https://github.com/metrico/iox-static-distro/tree/main/examples/rust)
   * [python](https://github.com/metrico/iox-static-distro/tree/main/examples/python)
   
-IOx Official clients:
+> IOx Flight SQL Official clients:
   
   * [influxdb-iox-client-go](https://github.com/influxdata/influxdb-iox-client-go)
   * [flightsql-dbapi-python](https://github.com/influxdata/flightsql-dbapi)
