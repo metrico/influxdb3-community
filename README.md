@@ -80,8 +80,10 @@ For other storage options refer to [env example](https://github.com/metrico/iox-
 <details>
     <summary><h2>Insert & Query</h2> Validate your IOx Setup</summary>
 
-It's time to test our fresh instance with inserts and queries
+<br>
 
+Let's start testing and using your brand new IOx instance!  
+  
 ### Health
 
 Check the instance health: `curl http://127.0.0.1:8080/health`
