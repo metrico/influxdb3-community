@@ -1,6 +1,6 @@
-# Flight GO client
-
-Example Flight SQL client in golang
+# IOx 
+### FlightSQL GO
+Client example for IOx gRPC Flight SQL API
 
 ```
 go mod tidy
