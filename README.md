@@ -35,6 +35,9 @@ docker-compose up -d
     <summary><h2>IOx Settings</h2> Deploy IOx using different settings</summary>  
   
 This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the same host using local storage:
+  
+![image](https://github.com/metrico/iox-static-distro/assets/1423657/55175f98-6b0a-4097-8a34-06ab6c4fd8fe)
+  
 
 ```
       - INFLUXDB_IOX_OBJECT_STORE=file
@@ -192,3 +195,10 @@ Once ready, we can perform queries against our data using the FlightSQL query bu
   
 
 </details>
+
+<hr>
+    
+## Disclaimers
+- All rights reserved by their respective owners. IOx and InfluxDB are a trademark of Influxdata.   
+- This project is not connected or endorsed by Influxdata or the IOx project. Hopefully one day!
+- Original, unstable, nightly. The IOx code is not modified in any way as part of the build process. 
