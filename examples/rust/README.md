@@ -1,7 +1,8 @@
 # IOx 
 ### FlightSQL Rust
-Client example for IOx gRPC Flight SQL API
+Example gRPC Flight SQL API client using rust
 
+#### Usage
 ```
 cargo build
 cargo run
