@@ -1,7 +1,8 @@
 # IOx 
 ### FlightSQL GO
-Client example for IOx gRPC Flight SQL API
+Example gRPC Flight SQL API client using golang
 
+#### Usage
 ```
 go mod tidy
 go run flightsql.go
