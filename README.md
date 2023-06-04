@@ -81,7 +81,7 @@ For other storage options refer to [env example](https://github.com/metrico/iox-
   
 
 <details>
-    <summary><h2>Insert & Query</h2> Validate your IOx Setup</summary>
+    <summary><h2>IOX Insert & Query</h2> Validate your IOx Setup</summary>
 
 <br>
 
@@ -170,7 +170,7 @@ company_sensors> select * from cpu WHERE usage_idle <= 96 limit 1;
 </details>
                                                         
 <details>
-    <summary><h2>Integrations</h2> Integrate your IOx Setup with Go, Rust, Python, etc</summary>  
+    <summary><h2>IOx Integrations</h2> Integrate your IOx Setup with Go, Rust, Python, etc</summary>  
   
 Flight SQL [client examples](https://github.com/metrico/iox-static-distro/tree/main/examples) are available for Go, Rust, Python and other languages.
   
