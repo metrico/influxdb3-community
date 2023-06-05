@@ -193,17 +193,9 @@ company_sensors> select * from cpu WHERE usage_idle <= 96 limit 1;
   
 > IOx Flight SQL [generic client examples](https://github.com/metrico/iox-static-distro/tree/main/examples)
   
-<a href="https://github.com/metrico/iox-static-distro/tree/main/examples/python">
-   <img src="https://github.com/metrico/iox-community/assets/1423657/37838c84-6504-4a69-bff2-a30bf6f20a5e" height=100 />
-</a>
-<a href="https://github.com/metrico/iox-static-distro/tree/main/examples/go">
-  <img src="https://github.com/metrico/iox-community/assets/1423657/bd8f21e3-cea8-4423-be08-08e4eee4ff7f" height=100 />
-</a>
-
-<a href="https://github.com/metrico/iox-static-distro/tree/main/examples/rust">
-  <img src="https://github.com/metrico/iox-community/assets/1423657/e7a4d53f-9e8a-45a1-b72b-fd427c7cf9ef" height=100 />
-</a>
-
+* <img src="https://github.com/metrico/iox-community/assets/1423657/37838c84-6504-4a69-bff2-a30bf6f20a5e" width=50 /> [python](https://github.com/metrico/iox-static-distro/tree/main/examples/python)
+* <img src="https://github.com/metrico/iox-community/assets/1423657/bd8f21e3-cea8-4423-be08-08e4eee4ff7f" width=50 /> [go](https://github.com/metrico/iox-static-distro/tree/main/examples/go)
+* <img src="https://github.com/metrico/iox-community/assets/1423657/e7a4d53f-9e8a-45a1-b72b-fd427c7cf9ef" width=50 /> [rust](https://github.com/metrico/iox-static-distro/tree/main/examples/rust)
   
 > IOx Flight SQL Official clients:
   
