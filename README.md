@@ -37,6 +37,24 @@ docker-compose up -d
   
 This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the same host using local storage:
   
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   Router    │    │  Ingester   │    │   Querier   │    │   Compactor │
+└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
+       │                  │                  │                  │       
+       │                  │                  │                  │       
+       └──────────────────┼──────────────────┼──────────────────┘             
+                          │                          
+                          │                          
+                       .──▼──.                       
+                      (       )   Shared sqlite      
+                      │`─────'│   file database      
+                      │       │  /tmp/db.sqlite      
+                      │.─────.│                      
+                      (       )                      
+                       `─────'                       
+```
+  
 ![image](https://github.com/metrico/iox-static-distro/assets/1423657/55175f98-6b0a-4097-8a34-06ab6c4fd8fe)
   
 
