@@ -1,5 +1,5 @@
-# FlightSQL 
-
+# IOx 
+### FlightSQL GO
 This client example is based on the Influxdb3-go official library from InfluxCommunity.
 
 ## Build
