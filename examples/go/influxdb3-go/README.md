@@ -9,10 +9,11 @@ go build -ldflags='-extldflags=-static -s -w' -o flight client.go
 
 ## Usage
 ```
+Usage of ./flight:
   -database string
     	FlightSQL Bucket (default "company_sensors")
   -query string
-    	FlightSQL Query (default "SELECT 1")
+    	FlightSQL Query (default "SELECT 'flight' as hello")
   -token string
     	FlightSQL Auth Token
   -url string
