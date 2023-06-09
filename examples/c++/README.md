@@ -17,7 +17,8 @@ apt update \
     && apt install -y -V libarrow-flight-dev \
     && apt install -y -V libarrow-flight-glib-dev \
     && apt-get install -y -V  libgflags-dev \
-    && apt-get install -y -V libarrow-flight-sql-dev 
+    && apt-get install -y -V libarrow-flight-sql-dev  \
+    && apt-get install -y -V libgrpc++-dev
 ```
 #### Build
 ```
