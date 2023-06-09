@@ -22,8 +22,8 @@ const char* mydatabase = std::getenv("DATABASE_NAME");
 DEFINE_string(host, myhost , "The host of the Flight SQL server.");
 DEFINE_string(token, mytoken, "The token for InfluxDB");
 DEFINE_string(database, mydatabase, "The database to query from");
-DEFINE_int32(port, 443, "The port of the Flight SQL server.");
-DEFINE_string(query, "SELECT * FROM 'measurementName'", "The query to execute.");
+DEFINE_int32(port, 8082, "The port of the Flight SQL server.");
+DEFINE_string(query, "SELECT * FROM cpu LIMIT 1", "The query to execute.");
 
 
 arrow::Status Main() {
