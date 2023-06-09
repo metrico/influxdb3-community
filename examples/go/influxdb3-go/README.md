@@ -4,6 +4,8 @@ This client example is based on the Influxdb3-go official library from InfluxCom
 
 ## Build
 ```
+go mod init flight
+go mod tidy
 go build -ldflags='-extldflags=-static -s -w' -o flight client.go
 ```
 
