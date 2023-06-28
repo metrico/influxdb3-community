@@ -5,7 +5,7 @@ Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in 
 
 ### Motivation
 😄 You want to try and experiment with IOx low-cost storage, unlimited cardinality and flight sql<br>
-🥵‍ The IOx project is in _"Cloud Only" mode and InfluxDB is not producing builds yet...<br>
+🥵‍ The IOx project is in _"Cloud Only"_ mode and InfluxDB is not producing builds yet...<br>
 😄 No problem! Meet the _unofficial_ InfluxDB 3.0 _"IOx"_ musl + docker builder for early adopters
 
 ##### Releases
