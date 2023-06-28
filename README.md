@@ -15,6 +15,10 @@ Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in 
 
 <br>
 
+## Preparation
+
+Before startin, familiarize with the [IOx/InfluxDB 3.0 design concepts and components](https://www.influxdata.com/blog/influxdb-3-0-system-architecture/)
+
 ## Get Started
 
 Pull the latest IOx static builds or use docker images. This demo will work with either.
