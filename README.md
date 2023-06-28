@@ -122,9 +122,17 @@ The expected response is `OK`
 ### Insert
 
 Insert a sample dataset using the Influx V2 API and line protocol to test the `router` API on port 8080
+
+#### Metrics
 ```
 wget -qO- "https://github.com/influxdata/influxdb_iox/raw/main/test_fixtures/lineproto/metrics.lp" | \
 curl -v "http://127.0.0.1:8080/api/v2/write?org=company&bucket=sensors" --data-binary @-
+```
+
+#### Logs
+```
+echo 'syslog,appname=myapp,facility=console,host=myhost,hostname=myhost,severity=warning facility_code=14i,message="warning message here",severity_code=4i,procid="12345",timestamp=1434055562000000000,version=1' | \
+ curl -v "http://127.0.0.1:8080/api/v2/write?org=company&bucket=logs" --data-binary @-
 ```
 
 The expected response is `204`
