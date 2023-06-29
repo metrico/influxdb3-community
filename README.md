@@ -214,7 +214,7 @@ company_logs> select * from syslog WHERE message LIKE '%here%'
 ```
 ##### Regex
 ```
-company_logs> select * from syslog WHERE message ~ '.*here.*'
+company_logs> select * from syslog WHERE message ~ '.+here'
 
 +---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
 | appname | facility | facility_code | host   | hostname | message              | procid | severity | severity_code | time                           | timestamp      | version |
