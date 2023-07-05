@@ -229,17 +229,23 @@ company_logs> select * from syslog WHERE message ~ '.+here'
 <details>
     <summary><h2>IOx Integrations</h2> Integrate your IOx Setup with Go, Rust, Python, etc</summary>  
   
-> IOx Flight SQL [generic client examples](https://github.com/metrico/iox-static-distro/tree/main/examples)
+> Official IOx FlightSQL clients:
+
+  * [influxdb3-go](https://github.com/InfluxCommunity/influxdb3-go)
+  * [influxdb3-js](https://github.com/InfluxCommunity/influxdb3-js)
+  * [influxdb3-python](https://github.com/InfluxCommunity/influxdb3-python)
+  * [influxdb3-java](https://github.com/InfluxCommunity/influxdb3-java)
+  * [influxdb3-csharp](https://github.com/InfluxCommunity/influxdb3-csharp)
+
+> Generic FlightSQL Drivers
   
-* <img src="https://github.com/metrico/iox-community/assets/1423657/37838c84-6504-4a69-bff2-a30bf6f20a5e" width=50 /> [python](https://github.com/metrico/iox-static-distro/tree/main/examples/python)
-* <img src="https://github.com/metrico/iox-community/assets/1423657/bd8f21e3-cea8-4423-be08-08e4eee4ff7f" width=50 /> [go](https://github.com/metrico/iox-static-distro/tree/main/examples/go)
-* <img src="https://github.com/metrico/iox-community/assets/1423657/e7a4d53f-9e8a-45a1-b72b-fd427c7cf9ef" width=50 /> [rust](https://github.com/metrico/iox-static-distro/tree/main/examples/rust)
-  
-> IOx Flight SQL Official clients:
-  
+  * [iox-community/python](https://github.com/metrico/iox-static-distro/tree/main/examples/python)
+  * [iox-community/go](https://github.com/metrico/iox-static-distro/tree/main/examples/go)
+  * [iox-community/rust](https://github.com/metrico/iox-static-distro/tree/main/examples/rust)
   * [influxdb-iox-client-go](https://github.com/influxdata/influxdb-iox-client-go)
   * [flightsql-dbapi-python](https://github.com/influxdata/flightsql-dbapi)
   * [influxdb_iox_client-rust](https://crates.io/crates/influxdb_iox_client)
+
   
 <details>
     <summary><h3>Grafana</h3> Integrate your IOx Setup with Grafana</summary>  
