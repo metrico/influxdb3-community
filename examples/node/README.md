@@ -5,7 +5,7 @@ Example gRPC Flight SQL API client using NodeJS
 #### Usage
 Install and import the [Influxdb3-js library](https://github.com/bonitoo-io/influxdb3-js)
 
-```
+```javascript
 const {InfluxDBClient, Point} = require('@influxdata/influxdb3-client');
 
 const token = "abc123"
