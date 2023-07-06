@@ -103,6 +103,11 @@ To enable S3/R2/Minio object storage use the following parameters:
 
 For other storage options refer to [env example](https://github.com/metrico/iox-builder/blob/main/env.example)
 
+### API Proxy
+
+To emulate InfluxDB3.0 Cloud works, an nginx proxy is included to serve all IOx services from a single endpoint.
+
+
 </details>
   
 
