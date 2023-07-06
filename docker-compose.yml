@@ -10,7 +10,7 @@ services:
     image: nginx:latest
     container_name: nginx_container
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./iox-nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 8086:8086
     expose:
