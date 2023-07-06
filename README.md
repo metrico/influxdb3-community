@@ -38,6 +38,8 @@ curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox 
 docker-compose up -d
 ```
 
+Your local IOx endpoint should be ready on port `8086`
+
 <br>
   
 <details>
@@ -62,6 +64,8 @@ This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the
                       (       )                      
                        `─────'                       
 ```
+
+Each service uses a dedicated port for scaling and distribution. In this demo, nginx will proxy traffic for us.
   
 <br>  
 
@@ -84,13 +88,13 @@ Each server needs an identifier for writing to object storage and as an identifi
 ```
 
 
-To enable persisten catalog using postgres, use the following:
+The demo catalog uses *sqlite* by default. To enable persistent catalog using *postgres*, use the following:
 
 ```
       - INFLUXDB_IOX_CATALOG_DSN=postgres://postgres@localhost:5432/postgres
 ```
 
-To enable S3/R2/Minio object storage use the following parameters:
+The demo stores to filesystem. To enable S3/R2/Minio object storage use the following parameters:
 
 ```
       - INFLUXDB_IOX_OBJECT_STORE=s3
@@ -106,6 +110,29 @@ For other storage options refer to [env example](https://github.com/metrico/iox-
 ### API Proxy
 
 To emulate InfluxDB3.0 Cloud works, an nginx proxy is included to serve all IOx services from a single endpoint.
+```
+events {}
+http {
+  server {
+    listen 8086;
+    http2 on;
+    location /api {
+       proxy_pass_request_headers on;
+       proxy_pass http://iox:8080;
+    }
+    location /health {
+       proxy_pass http://iox:8080;
+    }
+    location / {
+       proxy_pass_request_headers on;
+       if ($http_content_type = "application/grpc") {
+            grpc_pass iox:8082;
+       }
+       proxy_pass http://iox:8082;
+    }
+  }
+}
+```
 
 
 </details>
