@@ -8,7 +8,7 @@ Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in 
 🥵‍ The IOx project is in _"Cloud Only"_ mode and InfluxDB is not producing builds yet...<br>
 😄 No problem! Meet the _unofficial_ InfluxDB 3.0 _"IOx"_ musl + docker builder for early adopters
 
-##### Releases
+##### Nightly Builds
 ###### amd64/musl
   - [x] [docker](https://github.com/metrico/iox-builder/pkgs/container/iox-musl): `docker pull ghcr.io/metrico/iox-musl:latest`
   - [x] [binary](https://github.com/metrico/iox-builder/releases): `github.com/metrico/iox-builder/releases/latest/download/influxdb_iox`
@@ -53,7 +53,7 @@ This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the
 └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
        │                  │                  │                  │       
        │                  │                  │                  │       
-       └──────────────────┼──────────────────┼──────────────────┘             
+       └──────────────────┼──────────────────┘──────────────────┘             
                           │                          
                           │                          
                        .──▼──.                       
@@ -65,7 +65,7 @@ This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the
                        `─────'                       
 ```
 
-Each service uses a dedicated port for scaling and distribution. In this demo, nginx will proxy traffic for us.
+Each service uses a dedicated port for scaling and distribution. In this demo, nginx will proxy traffic between services.
   
 <br>  
 
