@@ -19,13 +19,13 @@ Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in 
 
 Before proceeding further, familiarize with the [IOx/InfluxDB 3.0 design concepts and components](https://www.influxdata.com/blog/influxdb-3-0-system-architecture/)
 
-![image](https://github.com/metrico/iox-community/assets/1423657/087777f3-df6e-4cd4-a838-83f51759ec47)
+<img src="https://github.com/metrico/iox-community/assets/1423657/f31266ad-bcea-431b-abbc-839fa4660517" width=800>
 
 <br>
 
 ## Get Started
 
-Pull the latest IOx static builds or use docker images. This demo will work with either.
+Pull the latest IOx static builds or use our public docker images. This guide will work with either.
 
 #### Static
 ```bash
