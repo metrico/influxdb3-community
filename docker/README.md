@@ -3,6 +3,7 @@
 # IOx Compose
 This recipe starts an IOx API served by Nginx and backed by Minio/S3 _(data)_ and Postgres _(metadata)_
 
+<img src="https://github.com/metrico/iox-community/assets/1423657/f31266ad-bcea-431b-abbc-839fa4660517" width=800>
 
 #### Docker
 To start the IOx bundle, review the [settings](docker-compose.yml) and initialize using `docker-compose`
