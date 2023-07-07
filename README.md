@@ -19,7 +19,28 @@ Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in 
 
 Before proceeding further, familiarize with the [IOx/InfluxDB 3.0 design concepts and components](https://www.influxdata.com/blog/influxdb-3-0-system-architecture/)
 
-<img src="https://github.com/metrico/iox-community/assets/1423657/f31266ad-bcea-431b-abbc-839fa4660517" width=800>
+<!-- <img src="https://github.com/metrico/iox-community/assets/1423657/f31266ad-bcea-431b-abbc-839fa4660517" width=800> -->
+```mermaid
+  graph TD;
+      Router-- gRPC -->Ingester:8083;
+      Router-- http/s + gRPC -->Querier:8082;
+      Ingester:8083-->Storage;
+      Querier:8082-->Storage;
+      Compactor:8084-->Storage{Storage};
+      Ingester:8083-->Metadata;
+      Querier:8082-->Metadata;
+      Metadata-.->Postgres(fa:fa-database Postgres);
+      Metadata-.->sqlite;
+      Garbage-Collector-->Storage;
+      Storage-.->S3;
+      Storage-.->Filesystem;
+
+   style Querier:8082 fill:#d9ead3ff
+   style Ingester:8083 fill:#c9daf8ff
+   style Compactor:8084 fill:#f4ccccff
+   style Garbage-Collector fill:#ead1dcff
+
+```
 
 <br>
 
@@ -46,28 +67,6 @@ Your local IOx endpoint should be ready on port `8086`
     <summary><h2>IOx Settings</h2> Deploy IOx using different settings</summary>  
   
 This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the same host using local storage:
-
-```mermaid
-  graph TD;
-      Router-->Ingester;
-      Router-->Querier;
-      Ingester-->Storage;
-      Querier-->Storage;
-      Compactor-->Storage;
-      Ingester-->Metadata;
-      Querier-->Metadata;
-      Metadata-.->Postgres;
-      Metadata-.->sqlite;
-      Garbage-Collector-->Storage;
-      Storage-.->S3;
-      Storage-.->Filesystem;
-
-   style Querier fill:#d9ead3ff
-   style Ingester fill:#c9daf8ff
-   style Compactor fill:#f4ccccff
-   style Garbage-Collector fill:#ead1dcff
-
-```
 
 Each service uses a dedicated port for scaling and distribution. In this demo, nginx will proxy traffic between services.
   
