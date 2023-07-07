@@ -22,8 +22,8 @@ Before proceeding further, familiarize with the [IOx/InfluxDB 3.0 design concept
 <!-- <img src="https://github.com/metrico/iox-community/assets/1423657/f31266ad-bcea-431b-abbc-839fa4660517" width=800> -->
 ```mermaid
   graph TD;
-      Router-- gRPC -->Ingester:8083;
-      Router-- http/s + gRPC -->Querier:8082;
+      Router:8080-- gRPC -->Ingester:8083;
+      Router:8080-- http/s + gRPC -->Querier:8082;
       Ingester:8083-->Storage;
       Querier:8082-->Storage;
       Compactor:8084-->Storage{Storage};
@@ -39,6 +39,16 @@ Before proceeding further, familiarize with the [IOx/InfluxDB 3.0 design concept
    style Ingester:8083 fill:#c9daf8ff
    style Compactor:8084 fill:#f4ccccff
    style Garbage-Collector fill:#ead1dcff
+
+   linkStyle 2 stroke: #c9daf8ff
+   linkStyle 3 stroke: #d9ead3ff
+   linkStyle 4 stroke: #f4ccccff
+   linkStyle 5 stroke: #c9daf8ff
+   linkStyle 6 stroke: #d9ead3ff
+   linkStyle 9 stroke: #ead1dcff
+
+
+
 
 ```
 
