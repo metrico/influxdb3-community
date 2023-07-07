@@ -1,0 +1,112 @@
+version: '2.1'
+
+volumes:
+  iox_data: {}
+  postgres_data: {}
+  grafana_data: {}
+  minio_data: {}
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_iox
+    volumes:
+      - ./iox-nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8086:8086
+    expose:
+      - 8086
+      
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    environment:
+      MINIO_ROOT_USER: "iox"
+      MINIO_ROOT_PASSWORD: "iox123"
+      MINIO_ACCESS_KEY: "minio"
+      MINIO_SECRET_KEY: "minio123"
+    command: server --console-address ":9001" /data
+  
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 minio minio123;
+      /usr/bin/mc mb iox;
+      /usr/bin/mc policy set public iox;
+      exit 0;
+      "
+  
+  iox:
+    image: ghcr.io/metrico/iox-musl:latest
+    container_name: iox
+    volumes:
+      - ./data:/data
+    environment:
+      - INFLUXDB_IOX_OBJECT_STORE=s3
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_DEFAULT_REGION=us-east-2
+      - AWS_ENDPOINT = http://minio:9000
+      - INFLUXDB_IOX_BUCKET=iox
+      - INFLUXDB_IOX_CATALOG_DSN=postgres://postgres@postgres:5432/iox
+#     - INFLUXDB_IOX_CATALOG_DSN=sqlite:///data/catalog.sqlite
+      - INFLUXDB_IOX_ROUTER_HTTP_BIND_ADDR=iox:8080
+      - INFLUXDB_IOX_ROUTER_GRPC_BIND_ADDR=iox:8081
+      - INFLUXDB_IOX_QUERIER_GRPC_BIND_ADDR=iox:8082
+      - INFLUXDB_IOX_INGESTER_GRPC_BIND_ADDR=iox:8083
+      - INFLUXDB_IOX_COMPACTOR_GRPC_BIND_ADDR=iox:8084
+      - INFLUXDB_IOX_PERSIST_HOT_PARTITION_COST=0
+      - LOG_FILTER=error
+    restart: unless-stopped
+    expose:
+      - 8080
+      - 8081
+      - 8082
+      - 8083
+      - 8084
+    ports:
+      - 8080:8080
+      - 8082:8082
+    links:
+      - postgres:postgres
+      - minio:minio
+    depends_on:
+      - postgres
+      - minio
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    expose:
+      - 5432
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/pgdata
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=iox
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    environment:
+      - INFLUX_HOST=iox:8082
+      - INFLUX_TOKEN=${INFLUXDB_TOKEN}
+      - INFLUX_ORG=company
+      - INFLUX_BUCKET=sensors
+      - GF_INSTALL_PLUGINS=influxdata-flightsql-datasource
+    volumes: 
+      - ./demo/grafana/datasources:/etc/grafana/provisioning/datasources
+      - grafana_data:/var/lib/grafana/
+    restart: always
+    depends_on:
+      - iox
