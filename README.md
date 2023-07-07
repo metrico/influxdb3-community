@@ -61,6 +61,12 @@ This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the
       Garbage-Collector-->Storage;
       Storage-.->S3;
       Storage-.->Filesystem;
+
+   style Querier fill:#d9ead3ff
+   style Ingester fill:#c9daf8ff
+   style Compactor fill:#f4ccccff
+   style Garbage-Collector fill:#ead1dcff
+
 ```
 
 Each service uses a dedicated port for scaling and distribution. In this demo, nginx will proxy traffic between services.
