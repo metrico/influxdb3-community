@@ -56,11 +56,11 @@ This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the
       Compactor-->Storage;
       Ingester-->Metadata;
       Querier-->Metadata;
-      Metadata-->Postgres;
-      Metadata-->sqlite;
+      Metadata-.->Postgres;
+      Metadata-.->sqlite;
       Garbage-Collector-->Storage;
-      Storage-->S3;
-      Storage-->Filesystem;
+      Storage-.->S3;
+      Storage-.->Filesystem;
 ```
 
 Each service uses a dedicated port for scaling and distribution. In this demo, nginx will proxy traffic between services.
