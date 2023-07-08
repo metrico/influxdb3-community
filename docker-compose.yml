@@ -25,7 +25,6 @@ services:
       - INFLUXDB_IOX_OBJECT_STORE=file
       - INFLUXDB_IOX_DB_DIR=/data
       - INFLUXDB_IOX_BUCKET=iox
-#     - INFLUXDB_IOX_CATALOG_DSN=postgres://postgres@postgres:5432/iox
       - INFLUXDB_IOX_CATALOG_DSN=sqlite:///data/catalog.sqlite
       - INFLUXDB_IOX_ROUTER_HTTP_BIND_ADDR=iox:8080
       - INFLUXDB_IOX_ROUTER_GRPC_BIND_ADDR=iox:8081
@@ -44,22 +43,6 @@ services:
     ports:
       - 8080:8080
       - 8082:8082
-#    links:
-#      - postgres:postgres
-#    depends_on:
-#      - postgres
-
-#  postgres:
-#    image: postgres
-#    container_name: postgres
-#    expose:
-#      - 5432
-#    volumes:
-#      - ./pgdata:/var/lib/postgresql/data/pgdata
-#    environment:
-#      - POSTGRES_HOST_AUTH_METHOD=trust
-#      - POSTGRES_DB=iox
-#      - PGDATA=/var/lib/postgresql/data/pgdata
 
   grafana:
     image: grafana/grafana:latest
