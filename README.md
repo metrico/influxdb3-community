@@ -1,13 +1,14 @@
 <img src="https://pbs.twimg.com/profile_banners/1967601206/1682514855/1500x500" width=800>
 
-# IOx
-Pronounced _(eye-ox)_ short for iron oxide. The new core of InfluxDB written in Rust on top of Apache Arrow.
+# InfluxDB 3.x IOx
+Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_
 
 ### Motivation
 😄 You want to try and experiment with IOx low-cost storage, unlimited cardinality and flight sql<br>
 🥵‍ The IOx project is in _"Cloud Only"_ mode and InfluxDB is not producing builds yet...<br>
 😄 No problem! Meet the _unofficial_ InfluxDB 3.0 _"IOx"_ musl + docker builder for early adopters
 
+#### TLDR
 ##### Nightly Builds
 ###### amd64/musl
   - [x] [docker](https://github.com/metrico/iox-builder/pkgs/container/iox-musl): `docker pull ghcr.io/metrico/iox-musl:latest`
@@ -47,16 +48,13 @@ Before proceeding further, familiarize with the [IOx/InfluxDB 3.0 design concept
    linkStyle 6 stroke: #d9ead3ff
    linkStyle 9 stroke: #ead1dcff
 
-
-
-
 ```
 
 <br>
 
 ## Get Started
 
-Pull the latest IOx static builds or use our public docker images. This guide will work with either.
+This guide uses Docker and docker-compose. You can run locally using a [static build](https://github.com/metrico/iox-community/releases).
 
 #### Static
 ```bash
@@ -65,8 +63,11 @@ curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox 
 ```
 
 #### Docker
+
+The default compose uses local filesystem. Use the full recipe for Object Storage and Postgres Catalog.
+
 ```
-docker-compose up -d
+docker-compose up -f docker-compose.yml -d
 ```
 
 Your local IOx endpoint should be ready on port `8086`
@@ -151,7 +152,7 @@ http {
 </details>
   
 
-<details>
+<details open=true>
     <summary><h2>IOX Insert & Query</h2> Validate your IOx Setup</summary>
 
 <br>
@@ -188,7 +189,7 @@ Let's launch the `sql` client using the `querier` gRPC API on port 8082
 * Using Binary: `./influxdb_iox --host http://localhost:8082 sql`
 * Using Docker: `docker run -ti --rm ghcr.io/metrico/iox:latest --host http://iox:8082 sql`
 
-#### [Datafusion SQL](https://github.com/influxdata/influxdb_iox/blob/main/docs/sql.md)
+#### [Flight SQL](https://github.com/influxdata/influxdb_iox/blob/main/docs/sql.md)
 
 The first requirement is to choose a namespace _(or bucket)_ from the available ones:
 ```
