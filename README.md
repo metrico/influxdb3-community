@@ -161,13 +161,16 @@ Let's start testing and using your brand new IOx instance!
   
 ### Health
 
-Check the instance health: `curl http://127.0.0.1:8080/health`
+Check the instance health: 
+```
+curl http://127.0.0.1:8080/health`
+```
 
 The expected response is `OK`
 
 ### Insert
 
-Insert a sample dataset using the Influx V2 API and line protocol to test the `router` API on port 8080
+Insert a sample dataset using the Influx V2 API and line protocol to test the `router` API on port `8080`
 
 #### Metrics
 ```
@@ -184,7 +187,7 @@ echo 'syslog,appname=myapp,facility=console,host=myhost,hostname=myhost,severity
 The expected response is `204`
 
 ### Query
-Let's launch the `sql` client using the `querier` gRPC API on port 8082
+Let's launch the `sql` client using the `querier` gRPC API on port `8082`
 
 * Using Binary: `./influxdb_iox --host http://localhost:8082 sql`
 * Using Docker: `docker run -ti --rm ghcr.io/metrico/iox:latest --host http://iox:8082 sql`
