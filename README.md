@@ -1,6 +1,6 @@
 <img src="https://pbs.twimg.com/profile_banners/1967601206/1682514855/1500x500" width=800>
 
-# InfluxDB 3.x IOx
+# IOx: InfluxDB 3.x Community Bulds
 Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_
 
 ### Motivation
