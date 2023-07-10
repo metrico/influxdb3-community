@@ -204,13 +204,13 @@ spans end_time_unix_nano="2021-02-19 20:50:25.6896741 +0000 UTC",instrumentation
 Insert a sample dataset using the Influx V2 API and line protocol to test the `router` API on port `8080`
 
 #### Metrics
-```
+```bash
 wget -qO- "https://github.com/influxdata/influxdb_iox/raw/main/test_fixtures/lineproto/metrics.lp" | \
 curl -v "http://127.0.0.1:8080/api/v2/write?org=company&bucket=sensors" --data-binary @-
 ```
 
 #### Logs
-```
+```bash
 echo 'syslog,appname=myapp,facility=console,host=myhost,hostname=myhost,severity=warning facility_code=14i,message="warning message here",severity_code=4i,procid="12345",timestamp=1434055562000000000,version=1' | \
  curl -v "http://127.0.0.1:8080/api/v2/write?org=company&bucket=logs" --data-binary @-
 ```
@@ -226,8 +226,10 @@ Let's launch the `sql` client using the `querier` gRPC API on port `8082`
 #### [Flight SQL](https://github.com/influxdata/influxdb_iox/blob/main/docs/sql.md)
 
 The first requirement is to choose a namespace _(or bucket)_ from the available ones:
-```
+```sql
 > show namespaces;
+```
+```
 +--------------+-----------------+
 | namespace_id | name            |
 +--------------+-----------------+
@@ -239,8 +241,10 @@ You are now in remote mode, querying namespace company_sensors
 ```
 
 Once a namespace is selected, we can display any contained tables:
-```
+```sql
 company_sensors> show tables;
+```
+```
 +---------------+--------------------+-------------+------------+
 | table_catalog | table_schema       | table_name  | table_type |
 +---------------+--------------------+-------------+------------+
@@ -262,8 +266,10 @@ company_sensors> show tables;
 
 From any of the available tables, we can select data:
 
-```
+```sql
 company_sensors> select count(*) from cpu;
+```
+```
 +-----------------+
 | COUNT(UInt8(1)) |
 +-----------------+
@@ -272,8 +278,10 @@ company_sensors> select count(*) from cpu;
 ```
 
 #### Metric Search
-```
+```sql
 company_sensors> select * from cpu WHERE usage_idle <= 96 limit 1;
+```
+```
 +------+---------------------------------+----------------------+-------------+------------------+-------------------+--------------+-----------+------------+---------------+-------------+-------------------+-------------------+
 | cpu  | host                            | time                 | usage_guest | usage_guest_nice | usage_idle        | usage_iowait | usage_irq | usage_nice | usage_softirq | usage_steal | usage_system      | usage_user        |
 +------+---------------------------------+----------------------+-------------+------------------+-------------------+--------------+-----------+------------+---------------+-------------+-------------------+-------------------+
@@ -283,9 +291,10 @@ company_sensors> select * from cpu WHERE usage_idle <= 96 limit 1;
 
 #### Log Search
 ##### LIKE
-```
+```sql
 company_logs> select * from syslog WHERE message LIKE '%here%'
-
+```
+```
 +---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
 | appname | facility | facility_code | host   | hostname | message              | procid | severity | severity_code | time                           | timestamp      | version |
 +---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
@@ -293,9 +302,10 @@ company_logs> select * from syslog WHERE message LIKE '%here%'
 +---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
 ```
 ##### Regex
-```
+```sql
 company_logs> select * from syslog WHERE message ~ '.+here'
-
+```
+```
 +---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
 | appname | facility | facility_code | host   | hostname | message              | procid | severity | severity_code | time                           | timestamp      | version |
 +---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
