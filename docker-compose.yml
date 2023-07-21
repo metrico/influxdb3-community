@@ -6,16 +6,6 @@ volumes:
   grafana_data: {}
 
 services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx_container
-    volumes:
-      - ./iox-nginx.conf:/etc/nginx/nginx.conf
-    ports:
-      - 8086:8086
-    expose:
-      - 8086
-      
   iox:
     image: ghcr.io/metrico/iox-musl:latest
     container_name: iox
@@ -43,6 +33,18 @@ services:
     ports:
       - 8080:8080
       - 8082:8082
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
+    volumes:
+      - ./iox-nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8086:8086
+    expose:
+      - 8086
+    depends_on:
+      - iox
 
   grafana:
     image: grafana/grafana:latest
