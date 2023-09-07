@@ -18,7 +18,8 @@ jobs:
       - name: Check out iox
         uses: actions/checkout@v3
         with:
-          repository: influxdata/influxdb_iox
+          repository: metrico/influxdb_iox
+          # repository: influxdata/influxdb_iox
       - run: |
           echo "VERSION=${{  github.ref_name }}" >> $GITHUB_ENV
       - run: sudo apt update && sudo apt install -y musl-tools
