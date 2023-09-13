@@ -19,4 +19,17 @@ datasources:
       token: ${INFLUX_TOKEN}
     readOnly: false
     editable: true
-
+  - name: Flux
+    type: influxdb
+    uid: flux
+    version: 2
+    access: proxy
+    url: http://fluxpipe:8086
+    basicAuth: false
+    jsonData:
+      defaultBucket:
+      httpMode: POST
+      organization: iox
+      version: Flux
+    secureJsonData:
+      token:
