@@ -96,6 +96,13 @@ services:
       - POSTGRES_DB=iox
       - PGDATA=/var/lib/postgresql/data/pgdata
 
+  fluxpipe:
+    image: ghcr.io/metrico/fluxpipe:latest
+    expose: 
+      - 8086
+     environment:
+      - IOX_SERVER=iox
+
   grafana:
     image: grafana/grafana:latest
     ports:
