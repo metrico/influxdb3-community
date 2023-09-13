@@ -98,6 +98,7 @@ services:
 
   fluxpipe:
     image: ghcr.io/metrico/fluxpipe:latest
+    container_name: fluxpipe
     expose: 
       - 8086
      environment:
