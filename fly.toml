@@ -1,0 +1,45 @@
+# fly.toml app for iox-community server
+# See https://github.com/metrico/iox-community for details
+# Notes: Requires an IPv6 address (free)
+
+app = "iox-api"
+primary_region = "mad"
+
+[build]
+  image = "ghcr.io/metrico/iox-musl:latest"
+
+[env]
+  INFLUXDB_IOX_BUCKET = "iox"
+  INFLUXDB_IOX_CATALOG_DSN = "sqlite:///data/catalog.sqlite"
+  INFLUXDB_IOX_COMPACTOR_GRPC_BIND_ADDR = "0.0.0.0:8084"
+  INFLUXDB_IOX_DB_DIR = "/data"
+  INFLUXDB_IOX_ID = "1000"
+  INFLUXDB_IOX_INGESTER_GRPC_BIND_ADDR = "0.0.0.0:8083"
+  INFLUXDB_IOX_OBJECT_STORE = "file"
+  INFLUXDB_IOX_QUERIER_GRPC_BIND_ADDR = "0.0.0.0:8082"
+  INFLUXDB_IOX_ROUTER_GRPC_BIND_ADDR = "0.0.0.0:8081"
+  INFLUXDB_IOX_ROUTER_HTTP_BIND_ADDR = "0.0.0.0:8080"
+  LOG_FILTER = "debug"
+
+[[mounts]]
+  source = "iox_data"
+  destination = "/data"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 8080
+    handlers = ["http"]
+    force_https = false
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8082
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 8082
+    handlers = []
