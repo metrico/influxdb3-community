@@ -41,6 +41,7 @@ services:
     ports:
       - 8080:8080
       - 8082:8082
+      
   iox-gc:
     image: influxdb_iox
     container_name: iox-gc
@@ -54,10 +55,6 @@ services:
       - INFLUXDB_IOX_DB_DIR=/data/db
       - INFLUXDB_IOX_BUCKET=iox
       - INFLUXDB_IOX_CATALOG_DSN=sqlite:///data/catalog.sqlite
-      - INFLUXDB_IOX_ROUTER_HTTP_BIND_ADDR=iox:8080
-      - INFLUXDB_IOX_ROUTER_GRPC_BIND_ADDR=iox:8081
-      - INFLUXDB_IOX_QUERIER_GRPC_BIND_ADDR=iox:8082
-      - INFLUXDB_IOX_INGESTER_GRPC_BIND_ADDR=iox:8083
       - INFLUXDB_IOX_COMPACTOR_GRPC_BIND_ADDR=iox:8084
       - INFLUXDB_IOX_COMPACTION_MEMORY_BUDGET_BYTES=3000000000
       - INFLUXDB_IOX_COMPACTION_MAX_COMPACTING_FILES=100
