@@ -28,11 +28,15 @@ services:
     volumes:
       - minio_data:/data
     environment:
-      MINIO_ROOT_USER: "iox"
-      MINIO_ROOT_PASSWORD: "iox123"
-      MINIO_ACCESS_KEY: "minio"
-      MINIO_SECRET_KEY: "minio123"
-    command: server --console-address ":9001" /data
+      - "MINIO_ROOT_USER=minio"
+      - "MINIO_ROOT_PASSWORD=minio123"
+      - "MINIO_ACCESS_KEY=minio"
+      - "MINIO_SECRET_KEY=minio123"
+    command:
+      - server
+      - --console-address
+      - ":9001"
+      - /data
   
   createbuckets:
     image: minio/mc
@@ -41,8 +45,8 @@ services:
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc alias set myminio http://minio:9000 minio minio123;
-      /usr/bin/mc mb iox;
-      /usr/bin/mc policy set public iox;
+      /usr/bin/mc mb myminio/iox;
+      /usr/bin/mc anonymous set public myminio/iox;
       exit 0;
       "
   
@@ -56,7 +60,8 @@ services:
       - AWS_ACCESS_KEY_ID=minio
       - AWS_SECRET_ACCESS_KEY=minio123
       - AWS_DEFAULT_REGION=us-east-2
-      - AWS_ENDPOINT = http://minio:9000
+      - AWS_ALLOW_HTTP=true
+      - AWS_ENDPOINT=http://minio:9000
       - INFLUXDB_IOX_BUCKET=iox
       - INFLUXDB_IOX_CATALOG_DSN=postgres://postgres@postgres:5432/iox
 #     - INFLUXDB_IOX_CATALOG_DSN=sqlite:///data/catalog.sqlite
@@ -65,7 +70,14 @@ services:
       - INFLUXDB_IOX_QUERIER_GRPC_BIND_ADDR=iox:8082
       - INFLUXDB_IOX_INGESTER_GRPC_BIND_ADDR=iox:8083
       - INFLUXDB_IOX_COMPACTOR_GRPC_BIND_ADDR=iox:8084
-      - INFLUXDB_IOX_PERSIST_HOT_PARTITION_COST=0
+      - INFLUXDB_IOX_COMPACTION_MEMORY_BUDGET_BYTES=3000000000
+      - INFLUXDB_IOX_COMPACTION_MAX_COMPACTING_FILES=100
+      - INFLUXDB_IOX_COMPACTION_MIN_ROWS_PER_RECORD_BATCH_TO_PLAN=32768
+      - INFLUXDB_IOX_COMPACTION_MAX_DESIRED_FILE_SIZE_BYTES=104857600
+      - INFLUXDB_IOX_COMPACTION_PERCENTAGE_MAX_FILE_SIZE=5
+      - INFLUXDB_IOX_GC_OBJECTSTORE_SLEEP_INTERVAL_MINUTES=1
+      - INFLUXDB_IOX_GC_PARQUETFILE_CUTOFF=30m
+      - INFLUXDB_IOX_GC_OBJECTSTORE_CUTOFF=30m
       - LOG_FILTER=error
     restart: unless-stopped
     expose:
@@ -83,6 +95,45 @@ services:
     depends_on:
       - postgres
       - minio
+  iox-gc:
+    image: ghcr.io/metrico/iox-musl:latest
+    container_name: iox-gc
+    volumes:
+      - ./data:/data
+    environment:
+      - INFLUXDB_IOX_OBJECT_STORE=s3
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_ALLOW_HTTP=true
+      - AWS_ENDPOINT=http://minio:9000
+      - INFLUXDB_IOX_BUCKET=iox
+      - INFLUXDB_IOX_CATALOG_DSN=postgres://postgres@postgres:5432/iox
+      #     - INFLUXDB_IOX_CATALOG_DSN=sqlite:///data/catalog.sqlite
+      - INFLUXDB_IOX_ROUTER_HTTP_BIND_ADDR=iox:8080
+      - INFLUXDB_IOX_ROUTER_GRPC_BIND_ADDR=iox:8081
+      - INFLUXDB_IOX_QUERIER_GRPC_BIND_ADDR=iox:8082
+      - INFLUXDB_IOX_INGESTER_GRPC_BIND_ADDR=iox:8083
+      - INFLUXDB_IOX_COMPACTOR_GRPC_BIND_ADDR=iox:8084
+      - INFLUXDB_IOX_COMPACTION_MEMORY_BUDGET_BYTES=3000000000
+      - INFLUXDB_IOX_COMPACTION_MAX_COMPACTING_FILES=100
+      - INFLUXDB_IOX_COMPACTION_MIN_ROWS_PER_RECORD_BATCH_TO_PLAN=32768
+      - INFLUXDB_IOX_COMPACTION_MAX_DESIRED_FILE_SIZE_BYTES=104857600
+      - INFLUXDB_IOX_COMPACTION_PERCENTAGE_MAX_FILE_SIZE=5
+      - INFLUXDB_IOX_GC_OBJECTSTORE_SLEEP_INTERVAL_MINUTES=1
+      - INFLUXDB_IOX_GC_PARQUETFILE_CUTOFF=30m
+      - INFLUXDB_IOX_GC_OBJECTSTORE_CUTOFF=30m
+      - LOG_FILTER=info
+    restart: unless-stopped
+    links:
+      - postgres:postgres
+      - minio:minio
+    depends_on:
+      - postgres
+      - minio
+    command:
+      - /influxdb_iox
+      - run
+      - garbage-collector
 
   postgres:
     image: postgres
@@ -101,7 +152,7 @@ services:
     container_name: fluxpipe
     expose: 
       - 8086
-     environment:
+    environment:
       - IOX_SERVER=iox
 
   grafana:
