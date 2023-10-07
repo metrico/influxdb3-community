@@ -51,7 +51,7 @@ services:
       "
   
   iox:
-    image: ghcr.io/metrico/iox-musl:latest
+    image: ghcr.io/metrico/influxdb-edge-musl:latest
     container_name: iox
     volumes:
       - ./data:/data
@@ -96,7 +96,7 @@ services:
       - postgres
       - minio
   iox-gc:
-    image: ghcr.io/metrico/iox-musl:latest
+    image: ghcr.io/metrico/influxdb-edge-musl:latest
     container_name: iox-gc
     volumes:
       - ./data:/data
