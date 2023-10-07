@@ -64,7 +64,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: github.event_name != 'pull_request'
         with:
-          name: edge-musl
+          name: influxdb_iox
           path: ./target/x86_64-unknown-linux-musl/release/influxdb_iox 
 
   build_iox_docker:
