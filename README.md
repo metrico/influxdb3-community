@@ -10,8 +10,8 @@ Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_
 
 #### Nightly Builds
 ###### amd64/musl
-  - [x] [docker](https://github.com/metrico/iox-builder/pkgs/container/iox-musl): `docker pull ghcr.io/metrico/iox-musl:latest`
-  - [x] [binary](https://github.com/metrico/iox-builder/releases): `github.com/metrico/iox-builder/releases/latest/download/influxdb_iox`
+  - [x] [docker](https://github.com/metrico/iox-community/pkgs/container/iox-musl): `docker pull ghcr.io/metrico/iox-musl:latest`
+  - [x] [binary](https://github.com/metrico/iox-community/releases): `github.com/metrico/iox-community/releases/latest/download/influxdb_iox`
 
 <br>
 
