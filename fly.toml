@@ -1,12 +1,12 @@
 # fly.toml app for iox-community server
 # See https://github.com/metrico/iox-community for details
-# Notes: Requires an IPv6 address (free)
+# Notes: Requires an IPv6 address (free) or IPv4 (paid)
 
-app = "iox-api"
-primary_region = "mad"
+app = "influxdb-edge"
+primary_region = "ams"
 
 [build]
-  image = "ghcr.io/metrico/iox-musl:latest"
+  image = "ghcr.io/metrico/influxdb-edge-musl:latest"
 
 [env]
   INFLUXDB_IOX_BUCKET = "iox"
