@@ -7,7 +7,7 @@ volumes:
 
 services:
   iox:
-    image: ghcr.io/metrico/iox-musl:latest
+    image: ghcr.io/metrico/influxdb-edge-musl:latest
     container_name: iox
     volumes:
       - ./data:/data
@@ -43,7 +43,7 @@ services:
       - 8082:8082
       
   iox-gc:
-    image: influxdb_iox
+    image: ghcr.io/metrico/influxdb-edge-musl:latest
     container_name: iox-gc
     build:
       dockerfile: ./Dockerfile
