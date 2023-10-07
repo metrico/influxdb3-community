@@ -1,7 +1,7 @@
 ![image](https://github.com/metrico/iox-community/assets/1423657/52ff076a-4261-48f3-ad43-e3183e0645cd)
 
 # InfluxDB 3.x "IOx" Community
-Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_
+Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_ aka _Edge_
 
 ### Motivation
 😄 You want to try and experiment with IOx low-cost storage, unlimited cardinality and flight sql<br>
@@ -10,7 +10,7 @@ Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_
 
 #### Nightly Builds
 ###### amd64/musl
-  - [x] [docker](https://github.com/metrico/iox-community/pkgs/container/iox-musl): `docker pull ghcr.io/metrico/iox-musl:latest`
+  - [x] [docker](https://github.com/metrico/iox-community/pkgs/container/influxdb-edge-musl): `docker pull ghcr.io/metrico/influxdb-edge-musl:latest`
   - [x] [binary](https://github.com/metrico/iox-community/releases): `github.com/metrico/iox-community/releases/latest/download/influxdb_iox`
 
 <br>
