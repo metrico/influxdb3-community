@@ -42,6 +42,7 @@ jobs:
           args: --release --target x86_64-unknown-linux-musl --features aws,default  
       - name: Check Target
         run: |
+          ls -alFh ./target/x86_64-unknown-linux-musl/release
           ls -alFh ./target/x86_64-unknown-linux-musl/release/influxdb_iox
           ldd ./target/x86_64-unknown-linux-musl/release/influxdb_iox        
       - name: Compress iox
