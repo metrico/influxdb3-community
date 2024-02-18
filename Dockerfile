@@ -5,6 +5,6 @@ RUN curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb3
 
 FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /influxdb_iox /influxdb3
+COPY --from=builder /influxdb3 /influxdb3
 EXPOSE 8080 8082
 CMD ["/influxdb3", "run"]
