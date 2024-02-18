@@ -11,7 +11,7 @@ Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_ aka _Edge_
 #### Nightly Builds
 ###### amd64/musl
   - [x] [docker](https://github.com/metrico/iox-community/pkgs/container/influxdb-edge-musl): `docker pull ghcr.io/metrico/influxdb-edge-musl:latest`
-  - [x] [binary](https://github.com/metrico/iox-community/releases): `github.com/metrico/iox-community/releases/latest/download/influxdb_iox`
+  - [x] [binary](https://github.com/metrico/iox-community/releases): `github.com/metrico/iox-community/releases/latest/download/influxdb3`
 
 <br>
 
@@ -57,8 +57,8 @@ This guide uses Docker and docker-compose. You can run locally using a [static b
 
 #### Static
 ```bash
-curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb_iox -O \
-&& chmod +x influxdb_iox
+curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb3 -O \
+&& chmod +x influxdb3
 ```
 
 #### Docker
