@@ -7,4 +7,4 @@ FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /influxdb3 /influxdb3
 EXPOSE 8080 8082
-CMD ["/influxdb3", "run"]
+CMD ["/influxdb3", "serve"]
