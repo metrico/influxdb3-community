@@ -131,7 +131,7 @@ services:
       - postgres
       - minio
     command:
-      - /influxdb_iox
+      - /influxdb3
       - run
       - garbage-collector
 
