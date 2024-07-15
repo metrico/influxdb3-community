@@ -67,7 +67,7 @@ services:
       - LOG_FILTER=info
     restart: unless-stopped
     command:
-      - /influxdb_iox
+      - /influxdb3
       - run
       - garbage-collector
 
