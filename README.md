@@ -68,10 +68,16 @@ The expected response is `OK`
       INFLUXDB3_DB_DIR: "/data"
 ```
 
+As write requests come in to the server, they are parsed, validated, and put into an in-memory WAL buffer. This buffer is flushed every second by default (can be changed through configuration), which will create a WAL file. Once the data is flushed to disk, it is put into a queryable in-memory buffer and then a response is sent back to the client that the write was successful. That data will now show up in queries to the server.
+
+InfluxDB periodically snapshots the WAL to persist the oldest data in the queryable buffer, allowing the server to remove old WAL files. By default, the server will keep up to 900 WAL files buffered up (15 minutes of data) and attempt to persist the oldest 10 minutes, keeping the most recent 5 minutes around.
+
+When the data is persisted out of the queryable buffer it is put into the configured object store as Parquet files. Those files are also put into an in-memory cache so that queries against the most recently persisted data do not have to go to object storage.
+
 Each server needs an identifier for writing to object storage and as an identifier that is added to replicated writes, Write Buffer segments and Chunks. Must be unique in a group of connected or semi-connected IOx servers. Must be a number that can be represented by a 32-bit unsigned integer.
 
 ```
-      - INFLUXDB_IOX_ID=1
+      INFLUXDB3_NODE_IDENTIFIER_PREFIX: 1
 ```
 
 
@@ -84,11 +90,11 @@ The demo catalog uses *sqlite* by default. To enable persistent catalog using *p
 The demo stores to filesystem. To enable S3/R2/Minio object storage use the following parameters:
 
 ```
-      - INFLUXDB_IOX_OBJECT_STORE=s3
+      - INFLUXDB3_OBJECT_STORE=s3
       - AWS_ACCESS_KEY_ID=access_key_value
       - AWS_SECRET_ACCESS_KEY=secret_access_key_value
       - AWS_DEFAULT_REGION=us-east-2
-      - INFLUXDB_IOX_BUCKET=bucket-name
+      - INFLUXDB3_BUCKET=bucket-name
       - AWS_ENDPOINT = http://minio:9000
 ```
 
@@ -182,7 +188,8 @@ echo 'syslog,appname=myapp,facility=console,host=myhost,hostname=myhost,severity
 
 #### Traces
 ```bash
-echo 'spans end_time_unix_nano="2025-01-26 20:50:25.6893952 +0000 UTC",instrumentation_library_name="tracegen",kind="SPAN_KIND_INTERNAL",name="okey-dokey",net.peer.ip="1.2.3.4",parent_span_id="d5270e78d85f570f",peer.service="tracegen-client",service.name="tracegen",span.kind="server",span_id="4c28227be6a010e1",status_code="STATUS_CODE_OK",trace_id="7d4854815225332c9834e6dbf85b9380"' |  curl -v "http://127.0.0.1:8181/api/v2/write?org=company&bucket=traces" --data-binary @-
+echo 'spans end_time_unix_nano="2025-01-26 20:50:25.6893952 +0000 UTC",instrumentation_library_name="tracegen",kind="SPAN_KIND_INTERNAL",name="okey-dokey",net.peer.ip="1.2.3.4",parent_span_id="d5270e78d85f570f",peer.service="tracegen-client",service.name="tracegen",span.kind="server",span_id="4c28227be6a010e1",status_code="STATUS_CODE_OK",trace_id="7d4854815225332c9834e6dbf85b9380"' | \
+ curl -v "http://127.0.0.1:8181/api/v2/write?org=company&bucket=traces" --data-binary @-
 ```
 
 The expected response is `204`
