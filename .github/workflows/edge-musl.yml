@@ -6,7 +6,9 @@ on:
     types: [created]
   schedule:
     # build nightly version 
-    - cron:  '30 5, * * *'
+    # - cron:  '30 5, * * *'
+    # build sunday version 
+    - cron:  '30 5, * * 0'
 
 jobs:
   build_iox_linux:
