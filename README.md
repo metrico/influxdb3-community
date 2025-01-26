@@ -15,42 +15,6 @@ Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_ aka _Edge_
 
 <br>
 
-## Preparation
-
-Before proceeding further, familiarize with the [IOx/InfluxDB 3.0 design concepts and components](https://www.influxdata.com/blog/influxdb-3-0-system-architecture/)
-
-<!-- <img src="https://github.com/metrico/iox-community/assets/1423657/f31266ad-bcea-431b-abbc-839fa4660517" width=800> -->
-```mermaid
-  graph TD;
-      Router:8080-- gRPC -->Ingester:8083;
-      Router:8080-- http/s + gRPC -->Querier:8082;
-      Ingester:8083-->Storage;
-      Querier:8082-->Storage;
-      Compactor:8084-->Storage{Storage};
-      Ingester:8083-->Metadata;
-      Querier:8082-->Metadata;
-      Metadata-.->Postgres(fa:fa-database Postgres);
-      Metadata-.->sqlite;
-      Garbage-Collector-->Storage;
-      Storage-.->S3;
-      Storage-.->Filesystem;
-
-   style Querier:8082 fill:#d9ead3ff
-   style Ingester:8083 fill:#c9daf8ff
-   style Compactor:8084 fill:#f4ccccff
-   style Garbage-Collector fill:#ead1dcff
-
-   linkStyle 2 stroke: #c9daf8ff
-   linkStyle 3 stroke: #d9ead3ff
-   linkStyle 4 stroke: #f4ccccff
-   linkStyle 5 stroke: #c9daf8ff
-   linkStyle 6 stroke: #d9ead3ff
-   linkStyle 9 stroke: #ead1dcff
-
-```
-
-<br>
-
 ## Get Started
 
 This guide uses Docker and docker-compose. You can run locally using a [static build](https://github.com/metrico/iox-community/releases).
@@ -85,23 +49,23 @@ The expected response is `OK`
   
 <details>
     <summary><h2>IOx Settings</h2> Deploy IOx using different settings</summary>  
-  
-This demo will launch IOx `router`, `querier`, `ingester` and `compactor` on the same host using local storage:
-
-Each service uses a dedicated port for scaling and distribution. In this demo, nginx will proxy traffic between services.
-  
+    
 <br>  
 
 ```
-      - INFLUXDB_IOX_OBJECT_STORE=file
-      - INFLUXDB_IOX_DB_DIR=/data
-      - INFLUXDB_IOX_BUCKET=iox
-      - INFLUXDB_IOX_CATALOG_DSN=sqlite:///data/catalog.sqlite
-      - INFLUXDB_IOX_ROUTER_HTTP_BIND_ADDR=iox:8080
-      - INFLUXDB_IOX_ROUTER_GRPC_BIND_ADDR=iox:8081
-      - INFLUXDB_IOX_QUERIER_GRPC_BIND_ADDR=iox:8082
-      - INFLUXDB_IOX_INGESTER_GRPC_BIND_ADDR=iox:8083
-      - INFLUXDB_IOX_COMPACTOR_GRPC_BIND_ADDR=iox:8084
+      INFLUXDB3_MAX_HTTP_REQUEST_SIZE: "10485760"
+      INFLUXDB3_GEN1_DURATION: "10m"
+      INFLUXDB3_WAL_FLUSH_INTERVAL: "1s"
+      INFLUXDB3_WAL_SNAPSHOT_SIZE: "600"
+      INFLUXDB3_NUM_WAL_FILES_TO_KEEP: "50"
+      INFLUXDB3_WAL_MAX_WRITE_BUFFER_SIZE: "100000"
+      INFLUXDB3_BUFFER_MEM_LIMIT_MB: "5000"
+      INFLUXDB3_PARQUET_MEM_CACHE_SIZE_MB: "1000"
+      INFLUXDB3_FORCE_SNAPSHOT_MEM_THRESHOLD: "70%"
+      INFLUXDB3_TELEMETRY_DISABLE_UPLOAD: true
+      INFLUXDB3_NODE_IDENTIFIER_PREFIX: "bucket-id"
+      INFLUXDB3_OBJECT_STORE: "file"
+      INFLUXDB3_DB_DIR: "/data"
 ```
 
 Each server needs an identifier for writing to object storage and as an identifier that is added to replicated writes, Write Buffer segments and Chunks. Must be unique in a group of connected or semi-connected IOx servers. Must be a number that can be represented by a 32-bit unsigned integer.
@@ -207,13 +171,18 @@ Insert a sample dataset using the Influx V2 API and line protocol to test the `r
 #### Metrics
 ```bash
 wget -qO- "https://raw.githubusercontent.com/metrico/influxdb_iox/main/test_fixtures/lineproto/metrics.lp" | \
-curl -v "http://127.0.0.1:8080/api/v2/write?org=company&bucket=sensors" --data-binary @-
+curl -v "http://127.0.0.1:8181/api/v2/write?org=company&bucket=sensors" --data-binary @-
 ```
 
 #### Logs
 ```bash
 echo 'syslog,appname=myapp,facility=console,host=myhost,hostname=myhost,severity=warning facility_code=14i,message="warning message here",severity_code=4i,procid="12345",timestamp=1434055562000000000,version=1' | \
- curl -v "http://127.0.0.1:8080/api/v2/write?org=company&bucket=logs" --data-binary @-
+ curl -v "http://127.0.0.1:8181/api/v2/write?org=company&bucket=logs" --data-binary @-
+```
+
+#### Traces
+```bash
+echo 'spans end_time_unix_nano="2025-01-26 20:50:25.6893952 +0000 UTC",instrumentation_library_name="tracegen",kind="SPAN_KIND_INTERNAL",name="okey-dokey",net.peer.ip="1.2.3.4",parent_span_id="d5270e78d85f570f",peer.service="tracegen-client",service.name="tracegen",span.kind="server",span_id="4c28227be6a010e1",status_code="STATUS_CODE_OK",trace_id="7d4854815225332c9834e6dbf85b9380"' |  curl -v "http://127.0.0.1:8181/api/v2/write?org=company&bucket=traces" --data-binary @-
 ```
 
 The expected response is `204`
@@ -228,90 +197,63 @@ Let's launch the `sql` client using the `querier` gRPC API on port `8082`
 
 The first requirement is to choose a namespace _(or bucket)_ from the available ones:
 ```sql
-> show namespaces;
-```
-```
-+--------------+-----------------+
-| namespace_id | name            |
-+--------------+-----------------+
-| 1            | company_sensors |
-+--------------+-----------------+
+influxdb3 show databases
++---------------+
+| iox::database |
++---------------+
+| logs          |
+| mydb          |
+| sensors       |
+| traces        |
++---------------+
 
-> use company_sensors;
-You are now in remote mode, querying namespace company_sensors
-```
-
-Once a namespace is selected, we can display any contained tables:
-```sql
-company_sensors> show tables;
-```
-```
-+---------------+--------------------+-------------+------------+
-| table_catalog | table_schema       | table_name  | table_type |
-+---------------+--------------------+-------------+------------+
-| public        | iox                | cpu         | BASE TABLE |
-| public        | iox                | disk        | BASE TABLE |
-| public        | iox                | diskio      | BASE TABLE |
-| public        | iox                | mem         | BASE TABLE |
-| public        | iox                | net         | BASE TABLE |
-| public        | iox                | processes   | BASE TABLE |
-| public        | iox                | swap        | BASE TABLE |
-| public        | iox                | system      | BASE TABLE |
-| public        | system             | queries     | BASE TABLE |
-| public        | information_schema | tables      | VIEW       |
-| public        | information_schema | views       | VIEW       |
-| public        | information_schema | columns     | VIEW       |
-| public        | information_schema | df_settings | VIEW       |
-+---------------+--------------------+-------------+------------+
 ```
 
-From any of the available tables, we can select data:
-
-```sql
-company_sensors> select count(*) from cpu;
-```
-```
-+-----------------+
-| COUNT(UInt8(1)) |
-+-----------------+
-| 248             |
-+-----------------+
-```
+We can query our data using the influxdb CLI or the GRPC Flight API
 
 #### Metric Search
 ```sql
-company_sensors> select * from cpu WHERE usage_idle <= 96 limit 1;
-```
-```
-+------+---------------------------------+----------------------+-------------+------------------+-------------------+--------------+-----------+------------+---------------+-------------+-------------------+-------------------+
-| cpu  | host                            | time                 | usage_guest | usage_guest_nice | usage_idle        | usage_iowait | usage_irq | usage_nice | usage_softirq | usage_steal | usage_system      | usage_user        |
-+------+---------------------------------+----------------------+-------------+------------------+-------------------+--------------+-----------+------------+---------------+-------------+-------------------+-------------------+
-| cpu0 | Andrews-MBP.hsd1.ma.comcast.net | 2020-06-11T16:52:00Z | 0.0         | 0.0              | 89.56262425447316 | 0.0          | 0.0       | 0.0        | 0.0           | 0.0         | 5.964214711729622 | 4.473161033797217 |
-+------+---------------------------------+----------------------+-------------+------------------+-------------------+--------------+-----------+------------+---------------+-------------+-------------------+-------------------+
+influxdb3 query --database sensors "SELECT * FROM home WHERE temp > 95 LIMIT 4" 
++--------+------+-------------------------------+
+| room   | temp | time                          |
++--------+------+-------------------------------+
+| Garden | 99.0 | 2025-01-25T23:00:01.309084551 |
+| Garden | 96.0 | 2025-01-25T16:10:11.745454525 |
+| Garden | 98.0 | 2025-01-25T16:10:25.745146130 |
+| Garden | 98.0 | 2025-01-25T16:10:37.742997495 |
++--------+------+-------------------------------++---------------------------------+----------------------+-------------+------------------+-------------------+--------------+-----------+------------+---------------+-------------+-------------------+-------------------+
 ```
 
 #### Log Search
 ##### LIKE
 ```sql
-company_logs> select * from syslog WHERE message LIKE '%here%'
-```
-```
-+---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
-| appname | facility | facility_code | host   | hostname | message              | procid | severity | severity_code | time                           | timestamp      | version |
-+---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
-| myapp   | console  | 14            | myhost | myhost   | warning message here | 12345  | warning  | 4             | 2023-06-28T20:30:20.484236503Z | 1.434055562e18 | 1.0     |
-+---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
+influxdb3 query --database logs "SELECT * FROM syslog WHERE message LIKE '%here%'" 
++---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+-------------------------------+----------------+---------+
+| appname | facility | facility_code | host   | hostname | message              | procid | severity | severity_code | time                          | timestamp      | version |
++---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+-------------------------------+----------------+---------+
+| myapp   | console  | 14            | myhost | myhost   | warning message here | 12345  | warning  | 4             | 2025-01-25T23:57:02.459118350 | 1.434055562e18 | 1.0     |
++---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+-------------------------------+----------------+---------+
+
 ```
 ##### Regex
 ```sql
-company_logs> select * from syslog WHERE message ~ '.+here'
+influxdb3 query --database logs "SELECT * FROM syslog WHERE message ~ '.+here'" 
++---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+-------------------------------+----------------+---------+
+| appname | facility | facility_code | host   | hostname | message              | procid | severity | severity_code | time                          | timestamp      | version |
++---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+-------------------------------+----------------+---------+
+| myapp   | console  | 14            | myhost | myhost   | warning message here | 12345  | warning  | 4             | 2025-01-25T23:57:02.459118350 | 1.434055562e18 | 1.0     |
++---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+-------------------------------+----------------+---------+
 ```
-```
-+---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
-| appname | facility | facility_code | host   | hostname | message              | procid | severity | severity_code | time                           | timestamp      | version |
-+---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
-| myapp   | console  | 14            | myhost | myhost   | warning message here | 12345  | warning  | 4             | 2023-06-28T20:30:20.484236503Z | 1.434055562e18 | 1.0     |
-+---------+----------+---------------+--------+----------+----------------------+--------+----------+---------------+--------------------------------+----------------+---------+
+
+#### Trace Search
+```sql
+influxdb3 query --database traces "SELECT * FROM spans" 
++---------------------------------------+------------------------------+--------------------+------------+-------------+------------------+-----------------+--------------+-----------+------------------+----------------+-------------------------------+----------------------------------+
+| end_time_unix_nano                    | instrumentation_library_name | kind               | name       | net.peer.ip | parent_span_id   | peer.service    | service.name | span.kind | span_id          | status_code    | time                          | trace_id                         |
++---------------------------------------+------------------------------+--------------------+------------+-------------+------------------+-----------------+--------------+-----------+------------------+----------------+-------------------------------+----------------------------------+
+| 2025-01-26 20:50:25.6893952 +0000 UTC | tracegen                     | SPAN_KIND_INTERNAL | okey-dokey | 1.2.3.4     | d5270e78d85f570f | tracegen-client | tracegen     | server    | 4c28227be6a010e1 | STATUS_CODE_OK | 2025-01-26T00:01:02.450652384 | 7d4854815225332c9834e6dbf85b9380 |
+| 2025-01-26 20:50:25.6893952 +0000 UTC | tracegen                     | SPAN_KIND_INTERNAL | okey-dokey | 1.2.3.4     | d5270e78d85f570f | tracegen-client | tracegen     | server    | 4c28227be6a010e1 | STATUS_CODE_OK | 2025-01-26T00:01:03.713172859 | 7d4854815225332c9834e6dbf85b9380 |
++---------------------------------------+------------------------------+--------------------+------------+-------------+------------------+-----------------+--------------+-----------+------------------+----------------+-------------------------------+----------------------------------+
 ```
 
 
