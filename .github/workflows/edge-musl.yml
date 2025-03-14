@@ -52,7 +52,7 @@ jobs:
           upx ./target/x86_64-unknown-linux-musl/release/influxdb3
       - name: Upload release
         if: github.event_name != 'pull_request'
-        uses: boxpositron/upload-multiple-releases@1.0.8
+        uses: boxpositron/upload-multiple-releases@1.0.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
