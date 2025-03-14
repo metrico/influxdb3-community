@@ -18,27 +18,27 @@ jobs:
       fail-fast: false
     steps:
       - name: Check out iox
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: influxdata/influxdb
       - run: |
           echo "VERSION=${{  github.ref_name }}" >> $GITHUB_ENV
       - run: sudo apt update && sudo apt install -y musl-tools
       - name: Setup protoc
-        uses: arduino/setup-protoc@v1.2.0
+        uses: arduino/setup-protoc@v1.2.1
       - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
+        uses: actions-rs/toolchain@v1.0.1
         with:
           profile: minimal
           toolchain: stable
           override: true
           target: x86_64-unknown-linux-musl
       - name: Update
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@v1.0.1
         with:
           command: update
       - name: Build
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@v1.0.1
         with:
           command: build
           args: --release --target x86_64-unknown-linux-musl --features aws,default  
@@ -52,7 +52,7 @@ jobs:
           upx ./target/x86_64-unknown-linux-musl/release/influxdb3
       - name: Upload release
         if: github.event_name != 'pull_request'
-        uses: boxpositron/upload-multiple-releases@1.0.7
+        uses: boxpositron/upload-multiple-releases@1.0.8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -63,7 +63,7 @@ jobs:
           draft: false
           prerelease: false
           overwrite: true
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
         with:
           name: influxdb3
@@ -78,17 +78,17 @@ jobs:
       fail-fast: false
     steps:
       - name: Check out iox
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Log in to the GHCR registry
-        uses: docker/login-action@v2.0.0
+        uses: docker/login-action@v2.1.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v2.8.0
       - name: Docker Build and push (server)
-        uses: docker/build-push-action@v4.0.0
+        uses: docker/build-push-action@v4.5.0
         with:
           context: .
           push: true
