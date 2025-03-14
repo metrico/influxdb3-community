@@ -25,9 +25,9 @@ jobs:
           echo "VERSION=${{  github.ref_name }}" >> $GITHUB_ENV
       - run: sudo apt update && sudo apt install -y musl-tools
       - name: Setup protoc
-        uses: arduino/setup-protoc@v1.2.1
+        uses: arduino/setup-protoc@v3.0.0
       - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1.0.1
+        uses: actions-rs/toolchain@v1.0.6
         with:
           profile: minimal
           toolchain: stable
