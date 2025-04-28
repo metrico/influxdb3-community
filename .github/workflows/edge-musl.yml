@@ -12,8 +12,8 @@ on:
 
 jobs:
   build_iox_linux:
-    name: ubuntu-20.04
-    runs-on: ubuntu-20.04
+    name: ubuntu-22.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
     steps:
@@ -73,7 +73,7 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: build_iox_linux 
     name: docker
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
     steps:
