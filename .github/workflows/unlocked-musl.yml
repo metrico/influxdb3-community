@@ -24,7 +24,9 @@ jobs:
           ref: unlocked
       - run: |
           echo "VERSION=${{  github.ref_name }}" >> $GITHUB_ENV
-      - run: sudo apt update && sudo apt install -y musl-tools
+      - run: sudo apt update && sudo apt install -y musl-tools libpython3.12 libpython3.12-dev
+      - name: Set PyO3 to dynamic linking
+        run: echo "PYO3_STATIC_LIB=0" >> $GITHUB_ENV
       - name: Setup protoc
         uses: arduino/setup-protoc@v3.0.0
       - name: Install stable toolchain
