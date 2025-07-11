@@ -1,14 +1,9 @@
-name: Build & Release InfluxDB3 Unlocked (musl)
+name: Build & Release InfluxDB3 Unlocked
 
 on:
   workflow_dispatch:
   release:
-    types: [created]
-#  schedule:
-    # build nightly version 
-    # - cron:  '30 5, * * *'
-    # build sunday version 
-    # - cron:  '30 5, * * 0'
+    types: [published]
 
 permissions:
   contents: read
@@ -28,6 +23,8 @@ jobs:
   build-binary:
     name: Build Binary
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ env.VERSION }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,6 +34,17 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
 
       - name: Install dependencies
         run: |
@@ -68,9 +76,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./influxdb3-unlocked-${GITHUB_REF_NAME}-linux-x64.tar.gz
-          asset_name: influxdb3-unlocked-${GITHUB_REF_NAME}-linux-x64.tar.gz
+          asset_path: ./influxdb3-unlocked-${VERSION}-linux-x64.tar.gz
+          asset_name: influxdb3-unlocked-${VERSION}-linux-x64.tar.gz
           asset_content_type: application/gzip
+
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: influxdb3-unlocked
+          path: target/$PROFILE/$PACKAGE
+          retention-days: 1
 
   build-docker:
     name: Build and Push Docker Image
@@ -82,6 +97,12 @@ jobs:
         with:
           repository: metrico/influxdb3-unlocked
           ref: unlocked
+
+      - name: Download binary artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: influxdb3-unlocked
+          path: ./binary
 
       - name: Log in to the GHCR registry
         uses: docker/login-action@v2.1.0
@@ -97,19 +118,12 @@ jobs:
         uses: docker/build-push-action@v4.5.0
         with:
           context: .
+          file: ./docker/Dockerfile.prebuilt
           push: true
           tags: |
             ghcr.io/${{ github.actor }}/influxdb3-unlocked:latest
-            ghcr.io/${{ github.actor }}/influxdb3-unlocked:${{ env.VERSION }}
+            ghcr.io/${{ github.actor }}/influxdb3-unlocked:${{ needs.build-binary.outputs.version }}
           build-args: |
-            RUST_VERSION=1.88
-            CARGO_INCREMENTAL=yes
-            CARGO_NET_GIT_FETCH_WITH_CLI=false
-            PROFILE=release
-            FEATURES=aws,gcp,azure,jemalloc_replacing_malloc
             PACKAGE=influxdb3
-            PBS_DATE=unset
-            PBS_VERSION=unset
-            PBS_TARGET=x86_64-unknown-linux-gnu
           cache-from: type=gha
           cache-to: type=gha,mode=max 
