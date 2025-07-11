@@ -41,33 +41,28 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y binutils build-essential curl pkg-config libssl-dev clang lld git patchelf protobuf-compiler zstd libz-dev
-
-      - name: Setup Python for build
-        run: |
-          mkdir -p .circleci
-          curl -o .circleci/scripts/fetch-python-standalone.bash https://raw.githubusercontent.com/influxdata/influxdb3/main/.circleci/scripts/fetch-python-standalone.bash
-          chmod +x .circleci/scripts/fetch-python-standalone.bash
-          ./.circleci/scripts/fetch-python-standalone.bash python-artifacts "${PBS_DATE}" "${PBS_VERSION}"
-          tar -C python-artifacts -zxf python-artifacts/all.tar.gz "./${PBS_TARGET}"
-          sed -i 's#tmp/workspace#influxdb3#' "python-artifacts/${PBS_TARGET}/pyo3_config_file.txt"
+          sudo apt install -y binutils build-essential curl pkg-config libssl-dev clang lld git patchelf protobuf-compiler zstd libz-dev python3-dev python3-pip
 
       - name: Build binary
         run: |
-          PYO3_CONFIG_FILE="python-artifacts/$PBS_TARGET/pyo3_config_file.txt" \
           cargo build --package="$PACKAGE" --profile="$PROFILE" --no-default-features --features="$FEATURES"
           objcopy --compress-debug-sections "target/$PROFILE/$PACKAGE"
-          patchelf --set-rpath '$ORIGIN/python/lib:$ORIGIN/../lib/influxdb3/python/lib' "target/$PROFILE/$PACKAGE"
+
+      - name: Extract version
+        run: |
+          VERSION=$(./target/$PROFILE/$PACKAGE --version | cut -d' ' -f2 | cut -d',' -f1)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Extracted version: $VERSION"
 
       - name: Create release archive
         run: |
           mkdir -p release
           cp "target/$PROFILE/$PACKAGE" release/
-          cp -a "python-artifacts/$PBS_TARGET/python" release/
-          tar -czf influxdb3-unlocked-${GITHUB_REF_NAME}-linux-x64.tar.gz -C release .
+          tar -czf influxdb3-unlocked-${VERSION}-linux-x64.tar.gz -C release .
           rm -rf release
 
       - name: Upload binary to release
+        if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -105,7 +100,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.actor }}/influxdb3-unlocked:latest
-            ghcr.io/${{ github.actor }}/influxdb3-unlocked:${{ github.ref_name }}
+            ghcr.io/${{ github.actor }}/influxdb3-unlocked:${{ env.VERSION }}
           build-args: |
             RUST_VERSION=1.88
             CARGO_INCREMENTAL=yes
