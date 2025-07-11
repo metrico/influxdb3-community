@@ -69,23 +69,19 @@ jobs:
           tar -czf influxdb3-unlocked-${VERSION}-linux-x64.tar.gz -C release .
           rm -rf release
 
-      - name: Upload binary to release
-        if: github.event_name == 'release'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./influxdb3-unlocked-${VERSION}-linux-x64.tar.gz
-          asset_name: influxdb3-unlocked-${VERSION}-linux-x64.tar.gz
-          asset_content_type: application/gzip
-
       - name: Upload binary artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: influxdb3-unlocked
+          name: influxdb3
           path: target/$PROFILE/$PACKAGE
           retention-days: 1
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          files: |
+            influxdb3-unlocked-${VERSION}-linux-x64.tar.gz
 
   build-docker:
     name: Build and Push Docker Image
@@ -99,9 +95,9 @@ jobs:
           ref: unlocked
 
       - name: Download binary artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: influxdb3-unlocked
+          name: influxdb3
           path: ./binary
 
       - name: Log in to the GHCR registry
