@@ -12,8 +12,8 @@ on:
 
 jobs:
   build_iox_linux:
-    name: ubuntu-22.04
-    runs-on: ubuntu-22.04
+    name: build_iox_linux
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     steps:
@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: metrico/influxdb3-unlocked
-          branch: unlocked
+          ref: unlocked
       - run: |
           echo "VERSION=${{  github.ref_name }}" >> $GITHUB_ENV
       - run: sudo apt update && sudo apt install -y musl-tools
@@ -74,7 +74,7 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: build_iox_linux 
     name: docker
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     steps:
