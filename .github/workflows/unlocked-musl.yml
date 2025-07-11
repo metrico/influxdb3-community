@@ -4,96 +4,117 @@ on:
   workflow_dispatch:
   release:
     types: [created]
-  schedule:
+#  schedule:
     # build nightly version 
     # - cron:  '30 5, * * *'
     # build sunday version 
-    - cron:  '30 5, * * 0'
+    # - cron:  '30 5, * * 0'
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  CARGO_INCREMENTAL: "yes"
+  CARGO_NET_GIT_FETCH_WITH_CLI: "false"
+  PROFILE: "release"
+  FEATURES: "aws,gcp,azure,jemalloc_replacing_malloc"
+  PACKAGE: "influxdb3"
+  PBS_DATE: "unset"
+  PBS_VERSION: "unset"
+  PBS_TARGET: "x86_64-unknown-linux-gnu"
 
 jobs:
-  build_iox_linux:
-    name: build_iox_linux
+  build-binary:
+    name: Build Binary
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
-      - name: Check out iox
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           repository: metrico/influxdb3-unlocked
           ref: unlocked
-      - run: |
-          echo "VERSION=${{  github.ref_name }}" >> $GITHUB_ENV
-      - run: sudo apt update && sudo apt install -y musl-tools libpython3.12 libpython3.12-dev
-      - name: Set PyO3 to dynamic linking
-        run: echo "PYO3_STATIC_LIB=0" >> $GITHUB_ENV
-      - name: Setup protoc
-        uses: arduino/setup-protoc@v3.0.0
-      - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1.0.6
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          target: x86_64-unknown-linux-musl
-      - name: Update
-        uses: actions-rs/cargo@v1.0.1
-        with:
-          command: update
-      - name: Build
-        uses: actions-rs/cargo@v1.0.1
-        with:
-          command: build
-          args: --release --target x86_64-unknown-linux-musl --features aws,default  
-      - name: Check Target
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install dependencies
         run: |
-          ls -alFh ./target/x86_64-unknown-linux-musl/release/influxdb3
-          ldd ./target/x86_64-unknown-linux-musl/release/influxdb3        
-      - name: Compress iox
+          sudo apt update
+          sudo apt install -y binutils build-essential curl pkg-config libssl-dev clang lld git patchelf protobuf-compiler zstd libz-dev
+
+      - name: Setup Python for build
         run: |
-          strip ./target/x86_64-unknown-linux-musl/release/influxdb3
-          upx ./target/x86_64-unknown-linux-musl/release/influxdb3
-      - name: Upload release
-        if: github.event_name != 'pull_request'
-        uses: boxpositron/upload-multiple-releases@1.0.7
+          mkdir -p .circleci
+          curl -o .circleci/scripts/fetch-python-standalone.bash https://raw.githubusercontent.com/influxdata/influxdb3/main/.circleci/scripts/fetch-python-standalone.bash
+          chmod +x .circleci/scripts/fetch-python-standalone.bash
+          ./.circleci/scripts/fetch-python-standalone.bash python-artifacts "${PBS_DATE}" "${PBS_VERSION}"
+          tar -C python-artifacts -zxf python-artifacts/all.tar.gz "./${PBS_TARGET}"
+          sed -i 's#tmp/workspace#influxdb3#' "python-artifacts/${PBS_TARGET}/pyo3_config_file.txt"
+
+      - name: Build binary
+        run: |
+          PYO3_CONFIG_FILE="python-artifacts/$PBS_TARGET/pyo3_config_file.txt" \
+          cargo build --package="$PACKAGE" --profile="$PROFILE" --no-default-features --features="$FEATURES"
+          objcopy --compress-debug-sections "target/$PROFILE/$PACKAGE"
+          patchelf --set-rpath '$ORIGIN/python/lib:$ORIGIN/../lib/influxdb3/python/lib' "target/$PROFILE/$PACKAGE"
+
+      - name: Create release archive
+        run: |
+          mkdir -p release
+          cp "target/$PROFILE/$PACKAGE" release/
+          cp -a "python-artifacts/$PBS_TARGET/python" release/
+          tar -czf influxdb3-unlocked-${GITHUB_REF_NAME}-linux-x64.tar.gz -C release .
+          rm -rf release
+
+      - name: Upload binary to release
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          release_config: |
-              ./target/x86_64-unknown-linux-musl/release/influxdb3
-          tag_name: ${{ env.VERSION }}
-          release_name: iox-musl_${{ env.VERSION }}
-          draft: false
-          prerelease: false
-          overwrite: true
-      - uses: actions/upload-artifact@v4
-        if: github.event_name != 'pull_request'
-        with:
-          name: influxdb3-unlocked
-          path: ./target/x86_64-unknown-linux-musl/release/influxdb3
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./influxdb3-unlocked-${GITHUB_REF_NAME}-linux-x64.tar.gz
+          asset_name: influxdb3-unlocked-${GITHUB_REF_NAME}-linux-x64.tar.gz
+          asset_content_type: application/gzip
 
-  build_iox_docker:
-    if: github.event_name != 'pull_request'
-    needs: build_iox_linux 
-    name: docker
+  build-docker:
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
+    needs: build-binary
     steps:
-      - name: Check out iox
+      - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          repository: metrico/influxdb3-unlocked
+          ref: unlocked
+
       - name: Log in to the GHCR registry
         uses: docker/login-action@v2.1.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2.8.0
-      - name: Docker Build and push (server)
+
+      - name: Docker Build and push
         uses: docker/build-push-action@v4.5.0
         with:
           context: .
           push: true
           tags: |
-           ghcr.io/metrico/influxdb3-unlocked:latest
+            ghcr.io/${{ github.actor }}/influxdb3-unlocked:latest
+            ghcr.io/${{ github.actor }}/influxdb3-unlocked:${{ github.ref_name }}
+          build-args: |
+            RUST_VERSION=1.88
+            CARGO_INCREMENTAL=yes
+            CARGO_NET_GIT_FETCH_WITH_CLI=false
+            PROFILE=release
+            FEATURES=aws,gcp,azure,jemalloc_replacing_malloc
+            PACKAGE=influxdb3
+            PBS_DATE=unset
+            PBS_VERSION=unset
+            PBS_TARGET=x86_64-unknown-linux-gnu
+          cache-from: type=gha
+          cache-to: type=gha,mode=max 
