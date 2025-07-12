@@ -1,27 +1,27 @@
 ![image](https://github.com/metrico/iox-community/assets/1423657/52ff076a-4261-48f3-ad43-e3183e0645cd)
 
 # InfluxDB 3.x "IOx" Community
-Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_ aka _Edge_
+Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_ aka _InfluxDB3 Core_ Unlocked
 
 ### Motivation
-😄 You want to try and experiment with IOx low-cost storage, unlimited cardinality and flight sql<br>
-~🥵‍ The IOx project is in _"Cloud Only"_ mode and InfluxDB is not producing builds yet...~<br>
-😄 No problem! Meet the _unofficial_ InfluxDB 3.0 _"IOx"_ musl + docker builder for early adopters
+😄 Community access to low-cost storage, unlimited cardinality and flight sql<br>
+🥵‍ Unlocking _"Open Core"_ limitations designed to promote Cloud/Enterprise<br>
+
 
 #### Nightly Builds
-###### amd64/musl
-  - [x] [docker](https://github.com/metrico/iox-community/pkgs/container/influxdb-edge-musl): `docker pull ghcr.io/metrico/influxdb-edge-musl:latest`
-  - [x] [binary](https://github.com/metrico/iox-community/releases): `github.com/metrico/iox-community/releases/latest/download/influxdb3`
+###### amd64
+  - [x] [docker](https://github.com/metrico/influxdb3-community/pkgs/container/influxdb3-unlocked): `docker pull ghcr.io/metrico/influxdb3-unlocked:latest`
+  - [x] [binary](https://github.com/metrico/influxdb3-community/releases): `github.com/metrico/influxdb3-community/releases/latest/download/influxdb3`
 
 <br>
 
 ## Get Started
 
-This guide uses Docker and docker-compose. You can run locally using a [static build](https://github.com/metrico/iox-community/releases).
+This guide uses Docker and docker-compose. You can run locally using a [static build](https://github.com/metrico/influxdb3-community/releases).
 
 #### Static
 ```bash
-curl -fsSL github.com/metrico/iox-builder/releases/latest/download/influxdb3 -O \
+curl -fsSL github.com/metrico/influxdb3-community/releases/latest/download/influxdb3 -O \
 && chmod +x influxdb3
 ```
 
