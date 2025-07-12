@@ -3,7 +3,7 @@ name: Build & Release InfluxDB3 Unlocked
 on:
   workflow_dispatch:
   release:
-    types: [published]
+    types: [published, edited]
 
 permissions:
   contents: write
