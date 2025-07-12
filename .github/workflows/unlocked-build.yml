@@ -65,15 +65,13 @@ jobs:
       - name: Create release archive
         run: |
           mkdir -p release
-          cp "./target/$PROFILE/$PACKAGE" release/
-          tar -czf influxdb3-unlocked-${VERSION}-linux-x64.tar.gz -C release .
-          rm -rf release
+          cp "./target/$PROFILE/$PACKAGE" release/influxdb3
 
       - name: Upload binary artifact
         uses: actions/upload-artifact@v4
         with:
           name: influxdb3
-          path: "./target/$PROFILE/$PACKAGE"
+          path: ./release/influxdb3
           retention-days: 1
 
       - name: Release
@@ -81,8 +79,8 @@ jobs:
         if: github.ref_type == 'tag'
         with:
           files: |
-            influxdb3-unlocked-${VERSION}-linux-x64.tar.gz
-
+            ./release/influxdb3
+            
   build-docker:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
