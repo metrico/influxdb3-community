@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: metrico/influxdb3-unlocked
-          ref: unlocked
+          ref: main
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -90,7 +90,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: metrico/influxdb3-unlocked
-          ref: unlocked
+          ref: main
 
       - name: Download binary artifact
         uses: actions/download-artifact@v4
