@@ -1,12 +1,13 @@
 ![image](https://github.com/metrico/iox-community/assets/1423657/52ff076a-4261-48f3-ad43-e3183e0645cd)
 
-# InfluxDB 3.x "IOx" Community
-Community Builds and Containers for InfluxDB 3.0 IOx _(eye-ox)_ aka _InfluxDB3 Core_ Unlocked
+# InfluxDB 3.x "IOx" Community Builds
+Unlocked Community Builds and Containers for InfluxDB 3.x IOx _(eye-ox)_ aka _InfluxDB3 Core_
 
 ### Motivation
 😄 Community access to low-cost storage, unlimited cardinality and flight sql<br>
 🥵‍ Unlocking _"Open Core"_ limitations designed to promote Cloud/Enterprise<br>
 
+This builder is based on the unlocked "Core" fork: https://github.com/metrico/influxdb3-unlocked
 
 #### Nightly Builds
 ###### amd64
