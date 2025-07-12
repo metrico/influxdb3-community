@@ -115,8 +115,8 @@ jobs:
           file: ./docker/Dockerfile.prebuilt
           push: true
           tags: |
-            ghcr.io/${{ github.actor }}/influxdb3-unlocked:latest
-            ghcr.io/${{ github.actor }}/influxdb3-unlocked:${{ needs.build-binary.outputs.version }}
+            ghcr.io/metrico/influxdb3-unlocked:latest
+            ghcr.io/metrico/influxdb3-unlocked:${{ needs.build-binary.outputs.version }}
           build-args: |
             PACKAGE=influxdb3
           cache-from: type=gha
