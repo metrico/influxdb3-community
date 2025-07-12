@@ -1,0 +1,3 @@
+[submodule "influxdb3-unlocked"]
+	path = influxdb3-unlocked
+	url = https://github.com/metrico/influxdb3-unlocked
