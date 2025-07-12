@@ -5,7 +5,7 @@ volumes:
 
 services:
   iox:
-    image: ghcr.io/metrico/influxdb-edge-musl:latest
+    image: ghcr.io/metrico/influxdb3-unlocked:latest
     container_name: iox
     volumes:
       - ./data:/data
