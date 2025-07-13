@@ -295,7 +295,7 @@ Once ready, we can perform queries against our data using the FlightSQL query bu
     <summary><h2>Legal Disclaimers</h2></summary>  
   
 - All rights reserved by their respective owners. IOx and InfluxDB are a trademark of Influxdata.   
-- This project is not connected or endorsed by Influxdata or the IOx project. Hopefully one day!
-- Original, unstable, nightly. The IOx code is not modified in any way as part of the build process. 
+- This project is not connected or endorsed by Influxdata or the IOx project.
+- Changes released under the same License terms as the original software. 
   
 </details>
