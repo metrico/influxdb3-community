@@ -199,29 +199,19 @@ influxdb3 query --database traces "SELECT * FROM spans"
 
 </details>
                                                         
-<details>
+<details open=true>
     <summary><h2>IOx Integrations</h2> Integrate your IOx Setup with Go, Rust, Python, etc</summary>  
-  
-> Official IOx FlightSQL clients:
 
-  * [influxdb3-go](https://github.com/InfluxCommunity/influxdb3-go)
-  * [influxdb3-js](https://github.com/InfluxCommunity/influxdb3-js)
-  * [influxdb3-python](https://github.com/InfluxCommunity/influxdb3-python)
-  * [influxdb3-java](https://github.com/InfluxCommunity/influxdb3-java)
-  * [influxdb3-csharp](https://github.com/InfluxCommunity/influxdb3-csharp)
+  ### FlightSQL
 
-> Generic FlightSQL Drivers
+Your service can be used with any FlightSQL client or InfluxDB3 Flight client. 
   
-  * [iox-community/python](https://github.com/metrico/iox-static-distro/tree/main/examples/python)
-  * [iox-community/go](https://github.com/metrico/iox-static-distro/tree/main/examples/go)
-  * [iox-community/rust](https://github.com/metrico/iox-static-distro/tree/main/examples/rust)
-  * [influxdb-iox-client-go](https://github.com/influxdata/influxdb-iox-client-go)
-  * [flightsql-dbapi-python](https://github.com/influxdata/flightsql-dbapi)
-  * [influxdb_iox_client-rust](https://crates.io/crates/influxdb_iox_client)
+  ### InfluxDB3 Explorer
 
-  
-<details>
-    <summary><h3>Grafana</h3> Integrate your IOx Setup with Grafana</summary>  
+Your service can be used with the [InfluxDB3 Explorer](https://docs.influxdata.com/influxdb3/explorer/)
+
+<img width="1317" height="952" alt="InfluxDB-3-Explorer-08-01-2025_09_33_PM" src="https://github.com/user-attachments/assets/c015cedf-677e-4493-9721-2e99eeb2d359" />
+
 
   ### Grafana Client
 
@@ -233,7 +223,6 @@ Once ready, we can perform queries against our data using the FlightSQL query bu
 
 ![image](https://user-images.githubusercontent.com/1423657/239708634-30b48942-d630-4feb-887d-5b6dc37f54d3.png)
                                                         
-</details>
 
 </details>
 
