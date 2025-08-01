@@ -1,11 +1,11 @@
-![image](https://github.com/metrico/iox-community/assets/1423657/52ff076a-4261-48f3-ad43-e3183e0645cd)
+<img width="300" alt="influx-unlocked" src="https://github.com/user-attachments/assets/cabf6239-2d95-4531-8bf0-054b6a97d5fe" />
 
 # InfluxDB 3.x "IOx" Community Builds
 Unlocked Community Builds and Containers for InfluxDB 3.x IOx _(eye-ox)_ aka _InfluxDB3 Core_
 
 ### Motivation
-😄 Community access to low-cost storage, unlimited cardinality and flight sql<br>
-🥵‍ Unlocking _"Open Core"_ limitations designed to promote Cloud/Enterprise<br>
+😄 Restore community access to low-cost storage, unlimited cardinality and flight sql<br>
+🥵‍ Unlocking _"Open Core"_ limitations only designed to promote Cloud/Enterprise<br>
 
 This builder is based on the unlocked "Core" fork: https://github.com/metrico/influxdb3-unlocked
 
@@ -53,7 +53,7 @@ The expected response is `OK`
     
 <br>  
 
-```
+```bash
       INFLUXDB3_MAX_HTTP_REQUEST_SIZE: "10485760"
       INFLUXDB3_GEN1_DURATION: "10m"
       INFLUXDB3_WAL_FLUSH_INTERVAL: "1s"
@@ -74,60 +74,6 @@ As write requests come in to the server, they are parsed, validated, and put int
 InfluxDB periodically snapshots the WAL to persist the oldest data in the queryable buffer, allowing the server to remove old WAL files. By default, the server will keep up to 900 WAL files buffered up (15 minutes of data) and attempt to persist the oldest 10 minutes, keeping the most recent 5 minutes around.
 
 When the data is persisted out of the queryable buffer it is put into the configured object store as Parquet files. Those files are also put into an in-memory cache so that queries against the most recently persisted data do not have to go to object storage.
-
-Each server needs an identifier for writing to object storage and as an identifier that is added to replicated writes, Write Buffer segments and Chunks. Must be unique in a group of connected or semi-connected IOx servers. Must be a number that can be represented by a 32-bit unsigned integer.
-
-```
-      INFLUXDB3_NODE_IDENTIFIER_PREFIX: 1
-```
-
-
-The demo catalog uses *sqlite* by default. To enable persistent catalog using *postgres*, use the following:
-
-```
-      - INFLUXDB_IOX_CATALOG_DSN=postgres://postgres@localhost:5432/postgres
-```
-
-The demo stores to filesystem. To enable S3/R2/Minio object storage use the following parameters:
-
-```
-      - INFLUXDB3_OBJECT_STORE=s3
-      - AWS_ACCESS_KEY_ID=access_key_value
-      - AWS_SECRET_ACCESS_KEY=secret_access_key_value
-      - AWS_DEFAULT_REGION=us-east-2
-      - INFLUXDB3_BUCKET=bucket-name
-      - AWS_ENDPOINT = http://minio:9000
-```
-
-For other storage options refer to [env example](https://github.com/metrico/iox-builder/blob/main/env.example)
-
-### API Proxy
-
-To emulate InfluxDB3.0 Cloud works, an nginx proxy is included to serve all IOx services from a single endpoint.
-```
-events {}
-http {
-  server {
-    listen 8086;
-    http2 on;
-    location /api {
-       proxy_pass_request_headers on;
-       proxy_pass http://iox:8080;
-    }
-    location /health {
-       proxy_pass http://iox:8080;
-    }
-    location / {
-       proxy_pass_request_headers on;
-       if ($http_content_type = "application/grpc") {
-            grpc_pass iox:8082;
-       }
-       proxy_pass http://iox:8082;
-    }
-  }
-}
-```
-
 
 </details>
   
