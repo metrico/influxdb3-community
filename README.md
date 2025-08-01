@@ -47,35 +47,9 @@ The expected response is `OK`
 
 
 <br>
-  
-<details>
-    <summary><h2>IOx Settings</h2> Deploy IOx using different settings</summary>  
-    
-<br>  
 
-```bash
-      INFLUXDB3_MAX_HTTP_REQUEST_SIZE: "10485760"
-      INFLUXDB3_GEN1_DURATION: "10m"
-      INFLUXDB3_WAL_FLUSH_INTERVAL: "1s"
-      INFLUXDB3_WAL_SNAPSHOT_SIZE: "600"
-      INFLUXDB3_NUM_WAL_FILES_TO_KEEP: "50"
-      INFLUXDB3_WAL_MAX_WRITE_BUFFER_SIZE: "100000"
-      INFLUXDB3_BUFFER_MEM_LIMIT_MB: "5000"
-      INFLUXDB3_PARQUET_MEM_CACHE_SIZE_MB: "1000"
-      INFLUXDB3_FORCE_SNAPSHOT_MEM_THRESHOLD: "70%"
-      INFLUXDB3_TELEMETRY_DISABLE_UPLOAD: true
-      INFLUXDB3_NODE_IDENTIFIER_PREFIX: "bucket-id"
-      INFLUXDB3_OBJECT_STORE: "file"
-      INFLUXDB3_DB_DIR: "/data"
-```
-
-As write requests come in to the server, they are parsed, validated, and put into an in-memory WAL buffer. This buffer is flushed every second by default (can be changed through configuration), which will create a WAL file. Once the data is flushed to disk, it is put into a queryable in-memory buffer and then a response is sent back to the client that the write was successful. That data will now show up in queries to the server.
-
-InfluxDB periodically snapshots the WAL to persist the oldest data in the queryable buffer, allowing the server to remove old WAL files. By default, the server will keep up to 900 WAL files buffered up (15 minutes of data) and attempt to persist the oldest 10 minutes, keeping the most recent 5 minutes around.
-
-When the data is persisted out of the queryable buffer it is put into the configured object store as Parquet files. Those files are also put into an in-memory cache so that queries against the most recently persisted data do not have to go to object storage.
-
-</details>
+## Configuration
+Your service can be configured by following the [InfluxDB3-Core Instructions](https://docs.influxdata.com/influxdb3/core/get-started/setup/)
   
 
 <details open=true>
