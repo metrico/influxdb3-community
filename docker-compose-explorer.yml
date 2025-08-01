@@ -23,50 +23,27 @@ services:
     expose:
       - 8181
     ports:
-      - 8086:8181
+      - 80:8181
       - 8181:8181
 
   influxdb3-explorer:
-    image: influxdata/influxdb3-ui:1.1.0
+    image: influxdata/influxdb3-ui:latest
     container_name: influxdb3-explorer
     volumes:
-      - explorer_config:/app-root/config:ro
       - explorer_db:/db:rw 
     ports:
       - 8888:80
       - 8889:8888
+    environment:
+      DEFAULT_INFLUX_SERVER: "http://iox"
+      DEFAULT_SERVER_NAME: "UNLOCKED"
+      DEFAULT_INFLUX_DATABASE: "__internal"
+      DEFAULT_API_TOKEN: "apiv3_pVfjZ-EsqJQ_hLYRMP--Elz0-UFad7ZKZENjn2ZB6ZHXXQsm4jp97XLEPrPVPBbldcWSZQYoMYg-12Fp3L7YRQ"
     command: --mode=query
     restart: unless-stopped
     depends_on:
-      config-generator:
-        condition: service_completed_successfully
       iox:
         condition: service_started
-
-  config-generator:
-    image: alpine:latest
-    volumes:
-      - explorer_config:/config
-    environment:
-      - INFLUX_SERVER=http://iox:8181
-      - INFLUX_DATABASE=iox
-      - API_TOKEN=${INFLUX_TOKEN:-apiv3_pVfjZ-EsqJQ_hLYRMP--Elz0-UFad7ZKZENjn2ZB6ZHXXQsm4jp97XLEPrPVPBbldcWSZQYoMYg-12Fp3L7YRQ}
-      - SERVER_NAME=InfluxDB3-Unlocked
-    command: >
-      sh -c "
-        echo 'Generating InfluxDB Explorer config...' &&
-        cat > /config/config.json << EOF
-        {
-          \"DEFAULT_INFLUX_SERVER\": \"$$INFLUX_SERVER\",
-          \"DEFAULT_INFLUX_DATABASE\": \"$$INFLUX_DATABASE\",
-          \"DEFAULT_API_TOKEN\": \"$$API_TOKEN\",
-          \"DEFAULT_SERVER_NAME\": \"$$SERVER_NAME\"
-        }
-        EOF
-        echo 'Config generated successfully:' &&
-        cat /config/config.json
-      "
-    restart: "no"
 
 volumes:
   explorer_config:
