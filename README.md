@@ -9,8 +9,8 @@ Unlocked Community Builds for InfluxDB 3.x IOx _(eye-ox)_ aka _InfluxDB3-Core_
 🔥 This builder is based on the unlocked "InfluxDB3-Core" fork: https://github.com/refluxdb/refluxdb<br>
 
 #### Nightly Builds
-- [x] [docker](https://github.com/metrico/influxdb3-community/pkgs/container/influxdb3-unlocked): `docker pull ghcr.io/metrico/influxdb3-unlocked:latest`
-- [x] [binary](https://github.com/metrico/influxdb3-community/releases): `github.com/metrico/influxdb3-community/releases/latest/download/influxdb3`
+- [x] [docker](https://github.com/metrico/influxdb3-community/pkgs/container/influxdb3-unlocked): `docker pull ghcr.io/refluxdb/refluxdb:latest`
+- [x] [binary](https://github.com/metrico/influxdb3-community/releases): `github.com/refluxdb/influxdb3-community/releases/latest/download/influxdb3`
 
 <br>
 
