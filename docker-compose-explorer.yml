@@ -1,0 +1,73 @@
+services:
+  iox:
+    image: ghcr.io/metrico/influxdb3-unlocked:latest
+    container_name: iox
+    volumes:
+      - ./data:/data
+    environment:
+      INFLUXDB3_MAX_HTTP_REQUEST_SIZE: "10485760"
+      INFLUXDB3_GEN1_DURATION: "10m"
+      INFLUXDB3_WAL_FLUSH_INTERVAL: "5s"
+      INFLUXDB3_WAL_SNAPSHOT_SIZE: "600"
+      INFLUXDB3_NUM_WAL_FILES_TO_KEEP: "50"
+      INFLUXDB3_WAL_MAX_WRITE_BUFFER_SIZE: "100000"
+      INFLUXDB3_BUFFER_MEM_LIMIT_MB: "5000"
+      INFLUXDB3_PARQUET_MEM_CACHE_SIZE_MB: "1000"
+      INFLUXDB3_FORCE_SNAPSHOT_MEM_THRESHOLD: "70%"
+      INFLUXDB3_TELEMETRY_DISABLE_UPLOAD: true
+      INFLUXDB3_NODE_IDENTIFIER_PREFIX: "iox-node1"
+      INFLUXDB3_BUCKET: "iox"
+      INFLUXDB3_OBJECT_STORE: "file"
+      INFLUXDB3_DB_DIR: "/data"
+    restart: unless-stopped
+    expose:
+      - 8181
+    ports:
+      - 8086:8181
+      - 8181:8181
+
+  influxdb3-explorer:
+    image: influxdata/influxdb3-ui:1.1.0
+    container_name: influxdb3-explorer
+    volumes:
+      - explorer_config:/app-root/config:ro
+      - explorer_db:/db:rw 
+    ports:
+      - 8888:80
+      - 8889:8888
+    command: --mode=query
+    restart: unless-stopped
+    depends_on:
+      config-generator:
+        condition: service_completed_successfully
+      iox:
+        condition: service_started
+
+  config-generator:
+    image: alpine:latest
+    volumes:
+      - explorer_config:/config
+    environment:
+      - INFLUX_SERVER=http://iox:8181
+      - INFLUX_DATABASE=iox
+      - API_TOKEN=${INFLUX_TOKEN:-apiv3_pVfjZ-EsqJQ_hLYRMP--Elz0-UFad7ZKZENjn2ZB6ZHXXQsm4jp97XLEPrPVPBbldcWSZQYoMYg-12Fp3L7YRQ}
+      - SERVER_NAME=InfluxDB3-Unlocked
+    command: >
+      sh -c "
+        echo 'Generating InfluxDB Explorer config...' &&
+        cat > /config/config.json << EOF
+        {
+          \"DEFAULT_INFLUX_SERVER\": \"$$INFLUX_SERVER\",
+          \"DEFAULT_INFLUX_DATABASE\": \"$$INFLUX_DATABASE\",
+          \"DEFAULT_API_TOKEN\": \"$$API_TOKEN\",
+          \"DEFAULT_SERVER_NAME\": \"$$SERVER_NAME\"
+        }
+        EOF
+        echo 'Config generated successfully:' &&
+        cat /config/config.json
+      "
+    restart: "no"
+
+volumes:
+  explorer_config:
+  explorer_db:
