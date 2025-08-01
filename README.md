@@ -1,7 +1,7 @@
-<img width="300" alt="influx-unlocked" src="https://github.com/user-attachments/assets/cabf6239-2d95-4531-8bf0-054b6a97d5fe" />
+<img width="718" height="415" alt="image" src="https://github.com/user-attachments/assets/db372f4c-c33a-47b1-a233-cab6ff86ff03" />
 
-# InfluxDB 3.x "IOx" Community Builds
-Unlocked Community Builds and Containers for InfluxDB 3.x IOx _(eye-ox)_ aka _InfluxDB3 Core_
+# RefluxDB
+Unlocked Community Builds for InfluxDB 3.x IOx _(eye-ox)_ aka _InfluxDB3-Core_
 
 ### Motivation
 😄 Restore community access to low-cost storage, unlimited cardinality and flight sql<br>
