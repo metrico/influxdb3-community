@@ -1,6 +1,6 @@
-<img width="718" height="415" alt="image" src="https://github.com/user-attachments/assets/db372f4c-c33a-47b1-a233-cab6ff86ff03" />
 
-# RefluxDB
+# <img height="215" alt="image" src="https://github.com/user-attachments/assets/db372f4c-c33a-47b1-a233-cab6ff86ff03" />
+
 Unlocked Community Builds for InfluxDB 3.x IOx _(eye-ox)_ aka _InfluxDB3-Core_
 
 ### Motivation
