@@ -1,5 +1,4 @@
-
-# <img height="215" alt="image" src="https://github.com/user-attachments/assets/db372f4c-c33a-47b1-a233-cab6ff86ff03" />
+<img width="300" alt="image" src="https://github.com/user-attachments/assets/44d2c1b0-4ec8-4d39-a75c-384e9e0a3f89" />
 
 Unlocked Community Builds for InfluxDB 3.x IOx _(eye-ox)_ aka _InfluxDB3-Core_
 
