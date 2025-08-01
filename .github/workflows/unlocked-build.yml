@@ -29,7 +29,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          repository: metrico/influxdb3-unlocked
+          repository: refluxdb/refluxdb
           ref: main
 
       - name: Install Rust
@@ -89,7 +89,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          repository: metrico/influxdb3-unlocked
+          repository: refluxdb/refluxdb
           ref: main
 
       - name: Download binary artifact
@@ -115,8 +115,9 @@ jobs:
           file: ./docker/Dockerfile.prebuilt
           push: true
           tags: |
-            ghcr.io/metrico/influxdb3-unlocked:latest
-            ghcr.io/metrico/influxdb3-unlocked:${{ needs.build-binary.outputs.version }}
+            ghcr.io/refluxdb/influxdb3-unlocked:latest
+            ghcr.io/refluxdb/refluxdb:latest
+            ghcr.io/refluxdb/refluxdb:${{ needs.build-binary.outputs.version }}
           build-args: |
             PACKAGE=influxdb3
           cache-from: type=gha
